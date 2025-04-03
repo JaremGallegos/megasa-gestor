@@ -1,0 +1,133 @@
+@startuml diagra_clase
+' ============================
+' Clases Principales
+' ============================
+class Cliente {
+  - id: int
+  - nombre: String
+  - direccion: String
+  - detalleContacto: String
+  + registrarCliente()
+  + actualizarDatos()
+  + consultarCampañas()
+}
+
+class Campaña {
+  - id: int
+  - titulo: String
+  - fechaInicio: Date
+  - fechaFinPrevista: Date
+  - costesEstimados: double
+  - presupuesto: double
+  - costesReales: double
+  - estado: String
+  - fechaFinalizacion: Date
+  + registrarCampaña()
+  + registrarFinalizacion()
+  + agregarPago(p: Pago)
+  + asignarEmpleado(e: Empleado)
+  + imprimirResumenGastos()
+  + imprimirFactura()
+}
+
+class Pago {
+  - id: int
+  - monto: double
+  - fechaPago: Date
+  + registrarPago()
+}
+
+class Anuncio {
+  - id: int
+  - descripcion: String
+  - estado: String
+  + registrarAnuncio()
+  + registrarFinalizacion()
+}
+
+class NotaConceptual {
+  - id: int
+  - descripcion: String
+  - fecha: Date
+  + registrarNota()
+  + modificarNota()
+}
+
+class CategoriaLaboral {
+  - id: int
+  - nombre: String
+  - sueldoBase: double
+  + modificarSueldo(nuevoSueldo: double)
+}
+
+' ============================
+' Clase Base Empleado y Subclases
+' ============================
+class Empleado {
+  - id: int
+  - nombre: String
+  - email: String
+  - rol: String
+  + actualizarDatos()
+  + asignarARol()
+}
+
+class DirectorCampaña {
+  + registrarCampaña()
+  + asignarEmpleados()
+  + registrarFinalizacionCampaña()
+  + registrarFinalizacionAnuncio()
+  + imprimirFactura()
+}
+
+class ContactoPersonal {
+  + registrarFinalizacionAnuncio()
+  + comunicarDetallesCampaña()
+}
+
+class PersonalCreativo {
+  + registrarNotaConceptual(n: NotaConceptual)
+}
+
+class Contable {
+  + altaTrabajador(e: Empleado)
+  + crearCategoriaLaboral(c: CategoriaLaboral)
+  + modificarSueldo(c: CategoriaLaboral, nuevoSueldo: double)
+  + modificarDatosTrabajador(e: Empleado)
+  + calcularNominas()
+  + imprimirFactura()
+}
+
+' Herencia: Las subclases extienden a Empleado
+Empleado <|-- DirectorCampaña
+Empleado <|-- ContactoPersonal
+Empleado <|-- PersonalCreativo
+Empleado <|-- Contable
+
+' ============================
+' Relaciones y Asociaciones
+' ============================
+' Cliente posee una o varias Campañas
+Cliente "1" --> "*" Campaña : posee
+
+' Cada Campaña pertenece a un Cliente
+Campaña "1" --> "1" Cliente : pertenece a
+
+' Una Campaña registra cero o más Pagos
+Campaña "1" --> "0..*" Pago : registra
+
+' Una Campaña contiene cero o más Anuncios
+Campaña "1" --> "0..*" Anuncio : contiene
+
+' Un Anuncio puede tener cero o más Notas Conceptuales
+Anuncio "1" --> "0..*" NotaConceptual : documenta
+
+' Cada NotaConceptual es registrada por un Empleado (generalmente Personal Creativo)
+NotaConceptual --> Empleado : autor
+
+' Una Campaña tiene asignados varios Empleados
+Campaña "1" --> "0..*" Empleado : asigna
+
+' Cada Empleado pertenece a una Categoria Laboral
+Empleado --> CategoriaLaboral : pertenece a
+@enduml

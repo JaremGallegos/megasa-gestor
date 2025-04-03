@@ -1,0 +1,245 @@
+from __future__ import annotations
+from typing import List
+from datetime import datetime, date
+from src.model.Pago import Pago
+from src.model.Anuncio import Anuncio
+from src.model.Empleado import Empleado
+from src.model.Cliente import Cliente
+import json
+
+class Campana:
+    def __init__(self, 
+                 id: int, 
+                 titulo: str, 
+                 fecha_inicio: str, 
+                 fecha_fin_prevista: str,
+                 costes_estimados: float, 
+                 presupuesto: float, 
+                 costes_reales: float = 0.0,
+                 estado: str = "En ejecución", 
+                 fecha_finalizacion: str = None, 
+                 pagos: List[Pago] = None, 
+                 anuncios: List[Anuncio] = None, 
+                 empleados: List[Empleado] = None,
+                 cliente: Cliente = None) -> None:
+        self._id = id
+        self._titulo = titulo
+        self._fecha_inicio = fecha_inicio
+        self._fecha_fin_prevista = fecha_fin_prevista
+        self._costes_estimados = costes_estimados
+        self._presupuesto = presupuesto
+        self._costes_reales = costes_reales
+        self._estado = estado
+        self._fecha_finalizacion = fecha_finalizacion
+        self._pagos = pagos if pagos is not None else []
+        self._anuncios = anuncios if anuncios is not None else []
+        self._empleados = empleados if empleados is not None else []
+        self._cliente = cliente
+        
+    @property
+    def id(self) -> int:
+        return self._id
+    
+    @id.setter
+    def id(self, id: int) -> None:
+        self._id = id
+
+    @property
+    def titulo(self) -> str:
+        return self._titulo
+    
+    @titulo.setter
+    def titulo(self, titulo: str) -> None:
+        self._titulo = titulo
+
+    @property
+    def fecha_inicio(self) -> str:
+        return self._fecha_inicio
+    
+    @fecha_inicio.setter
+    def fecha_inicio(self, fecha_inicio: str) -> None:
+        self._fecha_inicio = fecha_inicio
+
+    @property
+    def fecha_fin_prevista(self) -> str:
+        return self._fecha_fin_prevista
+    
+    @fecha_fin_prevista.setter
+    def fecha_fin_prevista(self, fecha_fin_prevista: str) -> None:
+        self._fecha_fin_prevista = fecha_fin_prevista
+
+    @property
+    def costes_estimados(self) -> float:
+        return self._costes_estimados
+    
+    @costes_estimados.setter
+    def costes_estimados(self, costes_estimados: float) -> None:
+        self._costes_estimados = costes_estimados
+
+    @property
+    def presupuesto(self) -> float:
+        return self._presupuesto
+    
+    @presupuesto.setter
+    def presupuesto(self, presupuesto: float) -> None:
+        self._presupuesto = presupuesto
+
+    @property
+    def costes_reales(self) -> float:
+        return self._costes_reales
+    
+    @costes_reales.setter
+    def costes_reales(self, costes_reales: float) -> None:
+        self._costes_reales = costes_reales
+
+    @property
+    def estado(self) -> str:
+        return self._estado
+    
+    @estado.setter
+    def estado(self, estado: str) -> None:
+        self._estado = estado
+
+    @property
+    def fecha_finalizacion(self) -> str:
+        return self._fecha_finalizacion
+    
+    @fecha_finalizacion.setter
+    def fecha_finalizacion(self, fecha_finalizacion: str) -> None:
+        self._fecha_finalizacion = fecha_finalizacion
+
+    @property
+    def pagos(self) -> List[Pago]:
+        return self._pagos
+    
+    @pagos.setter
+    def pagos(self, pagos: List[Pago]) -> None:
+        self._pagos = pagos
+
+    @property
+    def anuncios(self) -> List[Anuncio]:
+        return self._anuncios
+    
+    @anuncios.setter
+    def anuncios(self, anuncios: List[Anuncio]) -> None:
+        self._anuncios = anuncios
+
+    @property
+    def empleados(self) -> List[Empleado]:
+        return self._empleados
+    
+    @empleados.setter
+    def empleados(self, empleados: List[Empleado]) -> None:
+        self._empleados = empleados
+
+    @property
+    def cliente(self) -> Cliente:
+        return self._cliente
+    
+    @cliente.setter
+    def cliente(self, cliente: Cliente) -> None:
+        self._cliente = cliente
+        
+    def registrar_campana(self) -> None:
+        """
+        Registra la campaña validando que los campos obligatorios estén completos y
+        establece el estado inicial de la campaña.
+        """
+        if not self._titulo.strip():
+            raise ValueError("El título de la campaña es obligatorio.")
+        if not self._fecha_inicio.strip():
+            raise ValueError("La fecha de inicio es obligatorio.")
+        if not self._fecha_fin_prevista.strip():
+            raise ValueError("La fecha fin prevista es obligatoria.")
+        
+        # Se asegura que la campaña inicie en el estado "En ejecución"
+        self._estado = "En ejecución"
+        # Aquí se podría agregar lógica para persistir la campaña en un archivo JSON.
+        # Por ejemplo, guardando self.to_json() en un archivo.
+        # Esta función solo valida e inicializa la campaña.
+        print(f"Campaña '{self._titulo}' registrada correctamente con estado '{self._estado}'.")
+
+    def registrar_finalizacion(self) -> None:
+        """
+        Finaliza la campaña verificando que se encuentre en ejecución y actualiza el estado
+        a 'Finalizada', registrando la fecha de finalización.
+        """
+        if self._estado != "En ejecución":
+            raise ValueError("Solo se puede finalizar una campaña en ejecución.")
+        
+        # Se registra la fecha de finalización usando el formato ISO
+        self._fecha_finalizacion = datetime.now().isoformat()
+        self._estado = "Finalizada"
+        # Aquí se podría agregar lógica para actualizar la persistencia de la campaña.
+        print(f"Campaña '{self._titulo}' finalizada correctamente el {self._fecha_finalizacion}.")
+
+    def agregar_pago(self, p: Pago) -> None:
+        self._pagos.append(p)
+
+    def asignar_empleado(self, e: Empleado) -> None:
+        if e not in self._empleados:
+            self._empleados.append(e)
+
+    def imprimir_resumen_gastos(self) -> None:
+        """
+        Genera e imprime un resumen de los gastos de la campaña, comparando el presupuesto
+        con los costes reales acumulados.
+        """
+        resumen = f"Resumen de gastos para la campaña '{self._titulo}':\n"
+        resumen += f"Presupuesto: {self._presupuesto}\n"
+        resumen += f"Costes reales acumulados: {self._costes_reales}\n"
+        diferencia = self._presupuesto - self._costes_reales
+        resumen += f"Diferencia (Presupuesto - Costes reales): {diferencia}\n"
+        print(resumen)
+
+    def imprimir_factura(self) -> None:
+        """
+        Genera e imprime una factura de la campaña utilizando el detalle de los pagos realizados.
+        Se calcula el total pagado y se compara con el presupuesto para mostrar la diferencia.
+        """
+        total_pagado = sum([p.get_monto() for p in self._pagos])
+        factura = f"Factura de la campaña '{self._titulo}':\n"
+        factura += f"Presupuesto: {self._presupuesto}\n"
+        factura += f"Costes reales: {self._costes_reales}\n"
+        factura += f"Total pagado: {total_pagado}\n"
+        diferencia = self._presupuesto - total_pagado
+        factura += f"Diferencia a pagar: {diferencia}\n"
+        print(factura)
+
+    def registrar_gasto(self, gasto: float) -> None:
+        self._costes_reales += gasto
+
+    def consultar_gastos(self) -> float:
+        return self._costes_reales
+    
+    def to_json(self) -> str:
+        return json.dumps({
+            'id': self._id,
+            'titulo': self._titulo,
+            'fecha_inicio': self._fecha_inicio,
+            'fecha_fin_prevista': self._fecha_fin_prevista,
+            'costes_estimados': self._costes_estimados,
+            'presupuesto': self._presupuesto,
+            'costes_reales': self._costes_reales,
+            'estado': self._estado,
+            'fecha_finalizacion': self._fecha_finalizacion,
+            'pagos': [p.to_json() for p in self._pagos],
+            'anuncios': [a.to_json() for a in self._anuncios],
+            'empleados': [e.id for e in self._empleados],
+            'cliente': self._cliente.id if self._cliente else None
+        })
+
+    @classmethod
+    def from_json(cls, data: str) -> 'Campana':
+        data_dict = json.loads(data)
+        return cls(
+            id=data_dict['id'],
+            titulo=data_dict['titulo'],
+            fecha_inicio=data_dict['fecha_inicio'],
+            fecha_fin_prevista=data_dict['fecha_fin_prevista'],
+            costes_estimados=data_dict['costes_estimados'],
+            presupuesto=data_dict['presupuesto'],
+            costes_reales=data_dict['costes_reales'],
+            estado=data_dict['estado'],
+            fecha_finalizacion=data_dict['fecha_finalizacion']
+        )
