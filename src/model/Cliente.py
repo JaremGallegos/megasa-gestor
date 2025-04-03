@@ -1,7 +1,6 @@
 from __future__ import annotations
 from typing import List
 from src.model.Campana import Campana
-import json
 
 class Cliente:
     def __init__(self, 
@@ -59,32 +58,31 @@ class Cliente:
     def registrar_cliente(self) -> None:
         pass
     
-    def actualizar_datos(self) -> None:
-        pass
-    
-    def eliminar_cliente(self) -> None:
-        pass
+    def actualizar_datos(self, nombre: str = None, direccion: str = None, detalle_contacto: str = None) -> None:
+        if nombre:
+            self.nombre = nombre
+        if direccion:
+            self.detalle_contacto = direccion
+        if detalle_contacto:
+            self.detalle_contacto = detalle_contacto
+        
+        print("Datos del cliente actualizados")
     
     def consultar_campañas(self) -> List[Campana]:
-        return self._campañas
+        print("Consultando campañas asociadas al cliente...")
+        return self.campañas
     
-    def to_json(self) -> str:
-        return json.dumps({
-            'id': self._id,
-            'nombre': self._nombre,
-            'direccion': self._direccion,
-            'detalle_contacto': self._detalle_contacto,
-            'campañas': [campana.to_json() for campana in self._campañas]
-        })
+    def to_dict(self) -> str:
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'direccion': self.direccion,
+            'detalle_contacto': self.detalle_contacto,
+            'campañas': [campana.to_dict() for campana in self.campañas]
+        }
         
     @classmethod
-    def from_json(cls, data: str) -> 'Cliente':
-        data_dict = json.loads(data)
-        campañas = [Campana.from_json(json.dumps(c)) for c in data_dict.get('campañas', [])] # Existe un error en .get, no se reconoce el metodo
-        return cls(
-            id = data_dict['id'],
-            nombre = data_dict['nombre'],
-            direccion = data_dict['direccion'],
-            detalle_contacto = data_dict['detalle_contacto'],
-            campañas = campañas
-        )
+    def from_dict(cls, data: dict) -> 'Cliente':
+        cliente = cls(data['id'], data['nombre'], data['direccion'], data['detalle_contacto'])
+        from src.model.Campana import Campana
+        cliente.campañas = [Campana.form_dict(campana_data) for campana_data in data.get('campanas', [])]
