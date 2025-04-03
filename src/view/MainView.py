@@ -2,15 +2,15 @@ from src.model.CategoriaLaboral import CategoriaLaboral
 import os
 
 class MainView:
-    def clear_screen(self) -> None:
+    def limpiar_ventana(self) -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
         
-    def view_menu_principal(self, username: str, rol: CategoriaLaboral) -> None:
+    def view_menu_principal(self, username: str, rol: CategoriaLaboral) -> tuple[str, CategoriaLaboral] | None:
         """
         Muestra el panel principal para el usuario autenticado.
         """
         while True:
-            self.clear_screen()
+            self.limpiar_ventana()
             print(f"=== Panel Principal - Bienvenido {username} ({rol.value[1]}) ===")
             if rol.value[1] == "Director Campaña":
                 print("1. Mantener Datos Cliente")
@@ -19,27 +19,45 @@ class MainView:
                 print("4. Gestionar Gastos")
             elif rol.value[1] == "Personal Contacto":
                 print("1. Gestionar Anuncio")
-                print("2. Gestionar Anuncio")
-            elif rol.value[1] == "Personal Contacto":
-                print("1. Gestionar Campañaaa")
+                print("2. Gestionar Empleados")
             elif rol.value[1] == "Personal Creativo":
-                print("1. Gestionar Anuncio")
+                print("1. Gestionar Ideas de Anuncio")
+            elif rol.value[1] == "Personal Contable":
+                print("1. Mantener Categoria Laboral")
+                print("2. Mantener Empleados")
             print("________________________________________________")
             print("9. Cambiar contraseña")
             print("0. Cerrar sesión")
             opcion = input("Seleccione una opción: ")
             
             if opcion == '1':
-                # Aquí se implementaría la funcionalidad de cambio de contraseña.
-                pass
+                if rol.value[1] == "Director Campaña":
+                    return username, rol
+                elif rol.value[1] == "Personal Contacto":
+                    pass
+                elif rol.value[1] == "Personal Creativo":
+                    pass
+                elif rol.value[1] == "Personal Contable":
+                    pass
             elif opcion == '2':
+                if rol.value[1] == "Director Campaña":
+                    pass
+                elif rol.value[1] == "Personal Contacto":
+                    pass
+                elif rol.value[1] == "Personal Contable":
+                    pass
+            elif opcion == '3':
+                if rol.value[1] == "Director Campaña":
+                    pass
+            elif opcion == '4':
+                if rol.value[1] == "Director Campaña":
+                    pass
+            elif opcion == '9':
+                pass
+            elif opcion == '0':
                 print("Cerrando sesión...")
                 input("Presione Enter para continuar...")
                 break
-            elif opcion == '3':
-                pass
-            elif opcion == '4':
-                pass
             else:
                 print("Opción no válida.")
                 input("Presione Enter para continuar...")

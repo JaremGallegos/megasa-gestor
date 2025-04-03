@@ -1,11 +1,13 @@
 from __future__ import annotations
-from typing import List
+from typing import List, TYPE_CHECKING
 from datetime import datetime, date
 from src.model.Pago import Pago
 from src.model.Anuncio import Anuncio
 from src.model.Empleado import Empleado
-from src.model.Cliente import Cliente
 import json
+
+if TYPE_CHECKING:
+    from src.model.Cliente import Cliente
 
 class Campana:
     def __init__(self, 

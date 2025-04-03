@@ -1,0 +1,5 @@
+2025-04-03 10:15:43,387 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 10:16:59,338 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 10:17:19,075 - INFO - Registro de auditoria: Se agrego un nuevo cliente con id 1.
+2025-04-03 10:17:52,306 - INFO - Registro de auditoria: Se actualizó la información del cliente con id 1.
+2025-04-03 10:18:03,667 - INFO - Registro de auditoría: Se eliminó el cliente con id 1.

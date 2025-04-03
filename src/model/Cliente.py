@@ -6,10 +6,10 @@ import json
 class Cliente:
     ultimo_id: int = 0
     def __init__(self, 
-                 id: int, 
-                 nombre: str, 
-                 direccion: str, 
-                 detalle_contacto: str, 
+                 id: int = 0, 
+                 nombre: str = "", 
+                 direccion: str = 2, 
+                 detalle_contacto: str = "", 
                  campañas: List[Campana] = None) -> None:
         self._id = id;
         self._nombre = nombre
