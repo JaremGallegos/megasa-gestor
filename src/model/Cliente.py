@@ -55,6 +55,8 @@ class Cliente:
     
     @campañas.setter
     def campañas(self, campañas: List[Campana]) -> None:
+        if not all(isinstance(c, Campana) for c in campañas):
+            raise ValueError("Todos los elementos deben ser instancias de Campaña")
         self._campañas = campañas
         
     def registrar_cliente(self, nombre: str, direccion: str, detalle_contacto: str) -> None:
@@ -76,11 +78,11 @@ class Cliente:
         Si se proporciona un nuevo valor, se actualiza; de lo contrario, mantiene el valor actual.
         """
         if nombre is not None:
-            self.nombre = nombre
+            self.nombre = nombre.strip()
         if direccion is not None:
-            self.direccion = direccion
+            self.direccion = direccion.strip()
         if detalle_contacto is not None:
-            self.detalle_contacto = detalle_contacto
+            self.detalle_contacto = detalle_contacto.strip()
         
         print("Datos del cliente actualizado")
     
@@ -103,10 +105,12 @@ class Cliente:
         """
         data_dict: dict = json.loads(data)
         campañas = [Campana.from_json(c_json) for c_json in data_dict.get('campañas', [])]
-        return cls(
+        cliente = cls(
             id = data_dict['id'],
             nombre = data_dict['nombre'],
             direccion = data_dict['direccion'],
             detalle_contacto = data_dict['detalle_contacto'],
             campañas = campañas
         )
+        Cliente.ultimo_id = max(Cliente.ultimo_id, Cliente.id)
+        return cliente

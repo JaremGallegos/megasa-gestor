@@ -9,14 +9,21 @@ import json
 if TYPE_CHECKING:
     from src.model.Cliente import Cliente
 
+def str_to_date(fecha_str: str) -> date:
+    return datetime.strptime(fecha_str, "%Y-%m-%d").date()
+    
+def date_to_str(fecha_date: date) -> str:
+    return fecha_date.strftime("%Y-%m-%d")
+
 class Campana:
+    ultimo_id: int = 0
     def __init__(self, 
-                 id: int, 
-                 titulo: str, 
-                 fecha_inicio: str, 
-                 fecha_fin_prevista: str,
-                 costes_estimados: float, 
-                 presupuesto: float, 
+                 id: int = 0, 
+                 titulo: str = "", 
+                 fecha_inicio: str = "", 
+                 fecha_fin_prevista: str = "",
+                 costes_estimados: float = 0.0, 
+                 presupuesto: float = 0.0, 
                  costes_reales: float = 0.0,
                  estado: str = "En ejecución", 
                  fecha_finalizacion: str = None, 
@@ -26,13 +33,13 @@ class Campana:
                  cliente: Cliente = None) -> None:
         self._id = id
         self._titulo = titulo
-        self._fecha_inicio = fecha_inicio
-        self._fecha_fin_prevista = fecha_fin_prevista
+        self._fecha_inicio = str_to_date(fecha_inicio) if isinstance(fecha_inicio, str) else fecha_inicio
+        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista) if isinstance(fecha_fin_prevista, str) else fecha_fin_prevista
         self._costes_estimados = costes_estimados
         self._presupuesto = presupuesto
         self._costes_reales = costes_reales
         self._estado = estado
-        self._fecha_finalizacion = fecha_finalizacion
+        self._fecha_finalizacion = str_to_date(fecha_finalizacion) if fecha_finalizacion else None
         self._pagos = pagos if pagos is not None else []
         self._anuncios = anuncios if anuncios is not None else []
         self._empleados = empleados if empleados is not None else []
@@ -60,7 +67,7 @@ class Campana:
     
     @fecha_inicio.setter
     def fecha_inicio(self, fecha_inicio: str) -> None:
-        self._fecha_inicio = fecha_inicio
+        self._fecha_inicio = str_to_date(fecha_inicio)
 
     @property
     def fecha_fin_prevista(self) -> str:
@@ -68,7 +75,7 @@ class Campana:
     
     @fecha_fin_prevista.setter
     def fecha_fin_prevista(self, fecha_fin_prevista: str) -> None:
-        self._fecha_fin_prevista = fecha_fin_prevista
+        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista)
 
     @property
     def costes_estimados(self) -> float:
@@ -108,7 +115,7 @@ class Campana:
     
     @fecha_finalizacion.setter
     def fecha_finalizacion(self, fecha_finalizacion: str) -> None:
-        self._fecha_finalizacion = fecha_finalizacion
+        self._fecha_finalizacion = str_to_date(fecha_finalizacion)
 
     @property
     def pagos(self) -> List[Pago]:
@@ -141,24 +148,21 @@ class Campana:
     @cliente.setter
     def cliente(self, cliente: Cliente) -> None:
         self._cliente = cliente
-        
-    def registrar_campana(self) -> None:
+    
+    def registrar_campana(self, titulo: str, fecha_inicio: str, fecha_fin_prevista: str, costes_estimados: float, presupuesto: float) -> None:
         """
         Registra la campaña validando que los campos obligatorios estén completos y
         establece el estado inicial de la campaña.
         """
-        if not self._titulo.strip():
-            raise ValueError("El título de la campaña es obligatorio.")
-        if not self._fecha_inicio.strip():
-            raise ValueError("La fecha de inicio es obligatorio.")
-        if not self._fecha_fin_prevista.strip():
-            raise ValueError("La fecha fin prevista es obligatoria.")
-        
-        # Se asegura que la campaña inicie en el estado "En ejecución"
-        self._estado = "En ejecución"
-        # Aquí se podría agregar lógica para persistir la campaña en un archivo JSON.
-        # Por ejemplo, guardando self.to_json() en un archivo.
-        # Esta función solo valida e inicializa la campaña.
+        Campana.ultimo_id += 1
+        self.id = Campana.ultimo_id
+        self.titulo = titulo
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin_prevista = fecha_fin_prevista
+        self.costes_estimados = costes_estimados
+        self.presupuesto = presupuesto        
+        self.estado = "En ejecución"
+
         print(f"Campaña '{self._titulo}' registrada correctamente con estado '{self._estado}'.")
 
     def registrar_finalizacion(self) -> None:
@@ -169,10 +173,8 @@ class Campana:
         if self._estado != "En ejecución":
             raise ValueError("Solo se puede finalizar una campaña en ejecución.")
         
-        # Se registra la fecha de finalización usando el formato ISO
         self._fecha_finalizacion = datetime.now().isoformat()
         self._estado = "Finalizada"
-        # Aquí se podría agregar lógica para actualizar la persistencia de la campaña.
         print(f"Campaña '{self._titulo}' finalizada correctamente el {self._fecha_finalizacion}.")
 
     def agregar_pago(self, p: Pago) -> None:
@@ -213,19 +215,19 @@ class Campana:
     
     def to_json(self) -> str:
         return json.dumps({
-            'id': self._id,
-            'titulo': self._titulo,
-            'fecha_inicio': self._fecha_inicio,
-            'fecha_fin_prevista': self._fecha_fin_prevista,
-            'costes_estimados': self._costes_estimados,
-            'presupuesto': self._presupuesto,
-            'costes_reales': self._costes_reales,
-            'estado': self._estado,
-            'fecha_finalizacion': self._fecha_finalizacion,
-            'pagos': [p.to_json() for p in self._pagos],
-            'anuncios': [a.to_json() for a in self._anuncios],
-            'empleados': [e.id for e in self._empleados],
-            'cliente': self._cliente.id if self._cliente else None
+            'id': self.id,
+            'titulo': self.titulo,
+            'fecha_inicio': date_to_str(self.fecha_inicio),
+            'fecha_fin_prevista': date_to_str(self.fecha_fin_prevista),
+            'costes_estimados': self.costes_estimados,
+            'presupuesto': self.presupuesto,
+            'costes_reales': self.costes_reales,
+            'estado': self.estado,
+            'fecha_finalizacion': date_to_str(self.fecha_finalizacion) if self.fecha_finalizacion else None,
+            'pagos': [p.to_json() for p in self.pagos],
+            'anuncios': [a.to_json() for a in self.anuncios],
+            'empleados': [e.id for e in self.empleados],
+            'cliente': self.cliente.id if self.cliente else None
         })
 
     @classmethod
