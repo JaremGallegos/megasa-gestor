@@ -30,7 +30,8 @@ class Campana:
                  pagos: List[Pago] = None, 
                  anuncios: List[Anuncio] = None, 
                  empleados: List[Empleado] = None,
-                 cliente: Cliente = None) -> None:
+                 cliente: Cliente = None,
+                 contacto: Empleado = None) -> None:
         self._id = id
         self._titulo = titulo
         self._fecha_inicio = str_to_date(fecha_inicio) if isinstance(fecha_inicio, str) and fecha_inicio.strip() != "" else None
@@ -44,6 +45,7 @@ class Campana:
         self._anuncios = anuncios if anuncios is not None else []
         self._empleados = empleados if empleados is not None else []
         self._cliente = cliente
+        self._contacto = contacto
         
     @property
     def id(self) -> int:
@@ -148,6 +150,14 @@ class Campana:
     @cliente.setter
     def cliente(self, cliente: Cliente) -> None:
         self._cliente = cliente
+        
+    @property
+    def contacto(self) -> Empleado:
+        return self._contacto
+    
+    @contacto.setter
+    def contacto(self, empleado: Empleado) -> None:
+        self._contacto = empleado
     
     def registrar_campana(self, titulo: str, fecha_inicio: str, fecha_fin_prevista: str, costes_estimados: float, presupuesto: float) -> None:
         """
@@ -227,7 +237,8 @@ class Campana:
             'pagos': [p.to_json() for p in self.pagos],
             'anuncios': [a.to_json() for a in self.anuncios],
             'empleados': [e.id for e in self.empleados],
-            'cliente': self.cliente.id if self.cliente else None
+            'cliente': self.cliente.id if self.cliente else None,
+            'contacto': self.contacto.id if self.contacto else None
         })
 
     @classmethod

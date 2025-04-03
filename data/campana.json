@@ -11,7 +11,10 @@
         "fecha_finalizacion": null,
         "pagos": [],
         "anuncios": [],
-        "empleados": [],
-        "cliente": null
+        "empleados": [
+            1
+        ],
+        "cliente": null,
+        "contacto": null
     }
 ]

@@ -167,7 +167,59 @@ class CampañaController:
         logging.error("Campaña con id %s no encontrada para consultar pagos.", id)
         return []
     
-    def asignar_empleados_campaña(self, empleado: Empleado) -> bool:
+    def asignar_empleados_campaña(self, id: int, empleado: Empleado) -> bool:
         """
         UC6: Asignar Empleados a Campaña
+        Permite asignar a la campaña (que debe estar en ejecución) un empleado, 
+        validando que no se asigne uno ya presente.
+        
+        Args:
+            id (int): Identificador de la campaña.
+            empleado (Empleado): Empleado a asignar.
+            
+        Returns:
+            bool: True si se asigna correctamente, False en caso de error o duplicado.
         """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                if campaña.estado != "En ejecución":
+                    logging.error("La campaña con id %s no está en ejecución.", id)
+                    return False
+                if empleado in campaña.empleados:
+                    logging.warning("El empleado con id %s ya está asignado a la campaña.", empleado.id)
+                    return False
+                campaña.asignar_empleado(empleado)
+                self.guardar_campañas()
+                logging.info("Empleado con id %s asignado a la campaña con id %s.", empleado.id, id)
+                return True
+            
+        logging.error("Campaña con id %s no encontrada.", id)
+        return False
+    
+    def registrar_contacto_campaña(self, id: int, empleado: Empleado) -> bool:
+        """
+        UC7: Registrar Empleado de Contacto para Campaña
+        Permite designar a un empleado asignado a la campaña como contacto principal
+        
+        Args:
+            id (int): Identificador de la campaña.
+            empleado (Empleado): Empleado a designar como contacto.
+        
+        Returns:
+            bool: True si se designa correctamente, False en caso de error.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                if campaña.estado != "En ejecución":
+                    logging.error("La campaña con id %s no está en ejecución.", id)
+                    return False
+                if empleado not in campaña.empleados:
+                    logging.error("El empleado con id %s no está asignado a la campaña.", empleado.id)
+                    return False
+                campaña.contacto = empleado
+                self.guardar_campañas()
+                logging.info("Empleado con id %s designado como contacto para la campaña con id %s.", empleado.id, id)
+                return True
+        
+        logging.error("Campaña con id %s no encontrada.", id)
+        return False
