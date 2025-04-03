@@ -36,10 +36,10 @@ class Anuncio:
         Registra el anuncio validando que la descripción no esté vacía y estableciendo
         el estado inicial como 'En preparación'.
         """
-        if not self._descripcion or not self._descripcion.strip():
+        if not self.descripcion or not self.descripcion.strip():
             raise ValueError("La descripción del anuncio no puede estar vacía.")
         
-        self._estado = "En preparación"
+        self.estado = "En preparación"
 
     def registrar_finalizacion(self) -> None:
         """
@@ -47,27 +47,27 @@ class Anuncio:
         Si el anuncio ya está finalizado, se lanza una excepción.
         En caso contrario, se actualiza el estado del anuncio a 'Finalizado'.
         """
-        if self._estado == "Finalizado":
+        if self.estado == "Finalizado":
             raise ValueError("El anuncio ya se encuentra finalizado.")
 
         estados_validos = ["En preparación", "En ejecución"]
-        if self._estado not in estados_validos:
+        if self.estado not in estados_validos:
             raise ValueError("El anuncio no se puede finalizar desde el estado actual.")
         
-        self._estado = "Finalizado"
+        self.estado = "Finalizado"
 
     def to_json(self) -> str:
         return json.dumps({
-            'id': self._id,
-            'descripcion': self._descripcion,
-            'estado': self._estado
+            'id': self.id,
+            'descripcion': self.descripcion,
+            'estado': self.estado
         })
 
     @classmethod
     def from_json(cls, data: str) -> 'Anuncio':
         data_dict = json.loads(data)
         return cls(
-            id=data_dict['id'],
-            descripcion=data_dict['descripcion'],
-            estado=data_dict['estado']
+            id = data_dict['id'],
+            descripcion = data_dict['descripcion'],
+            estado = data_dict['estado']
         )

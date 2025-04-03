@@ -163,36 +163,39 @@ class Campana:
         self.presupuesto = presupuesto        
         self.estado = "En ejecución"
 
-        print(f"Campaña '{self._titulo}' registrada correctamente con estado '{self._estado}'.")
+        print(f"Campaña '{self.titulo}' registrada correctamente con estado '{self._estado}'.")
 
     def registrar_finalizacion(self) -> None:
         """
         Finaliza la campaña verificando que se encuentre en ejecución y actualiza el estado
         a 'Finalizada', registrando la fecha de finalización.
         """
-        if self._estado != "En ejecución":
+        if self.estado != "En ejecución":
             raise ValueError("Solo se puede finalizar una campaña en ejecución.")
         
-        self._fecha_finalizacion = datetime.now().isoformat()
-        self._estado = "Finalizada"
-        print(f"Campaña '{self._titulo}' finalizada correctamente el {self._fecha_finalizacion}.")
+        self.fecha_finalizacion = datetime.now().isoformat()
+        self.estado = "Finalizada"
+        print(f"Campaña '{self.titulo}' finalizada correctamente el {self.fecha_finalizacion}.")
 
     def agregar_pago(self, p: Pago) -> None:
-        self._pagos.append(p)
+        self.pagos.append(p)
 
     def asignar_empleado(self, e: Empleado) -> None:
-        if e not in self._empleados:
-            self._empleados.append(e)
+        if e not in self.empleados:
+            self.empleados.append(e)
+
+    def registrar_gasto(self, gasto: float) -> None:
+        self.costes_reales += gasto
 
     def imprimir_resumen_gastos(self) -> None:
         """
         Genera e imprime un resumen de los gastos de la campaña, comparando el presupuesto
         con los costes reales acumulados.
         """
-        resumen = f"Resumen de gastos para la campaña '{self._titulo}':\n"
-        resumen += f"Presupuesto: {self._presupuesto}\n"
-        resumen += f"Costes reales acumulados: {self._costes_reales}\n"
-        diferencia = self._presupuesto - self._costes_reales
+        resumen = f"Resumen de gastos para la campaña '{self.titulo}':\n"
+        resumen += f"Presupuesto: {self.presupuesto}\n"
+        resumen += f"Costes reales acumulados: {self.costes_reales}\n"
+        diferencia = self.presupuesto - self.costes_reales
         resumen += f"Diferencia (Presupuesto - Costes reales): {diferencia}\n"
         print(resumen)
 
@@ -209,9 +212,6 @@ class Campana:
         diferencia = self._presupuesto - total_pagado
         factura += f"Diferencia a pagar: {diferencia}\n"
         print(factura)
-
-    def registrar_gasto(self, gasto: float) -> None:
-        self._costes_reales += gasto
     
     def to_json(self) -> str:
         return json.dumps({

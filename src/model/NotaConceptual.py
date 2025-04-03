@@ -37,16 +37,16 @@ class NotaConceptual:
 
     def to_json(self) -> str:
         return json.dumps({
-            'id': self._id,
-            'descripcion': self._descripcion,
-            'fecha': self._fecha
+            'id': self.id,
+            'descripcion': self.descripcion,
+            'fecha': self.fecha
         })
 
     @classmethod
     def from_json(cls, data: str) -> 'NotaConceptual':
         data_dict = json.loads(data)
         return cls(
-            id=data_dict['id'],
-            descripcion=data_dict['descripcion'],
-            fecha=data_dict['fecha']
+            id = data_dict['id'],
+            descripcion = data_dict['descripcion'],
+            fecha = data_dict['fecha']
         )

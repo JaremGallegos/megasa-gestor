@@ -37,16 +37,16 @@ class Pago:
     
     def to_json(self) -> str:
         return json.dumps({
-            'id': self._id,
-            'monto': self._monto,
-            'fecha_pago': self._fecha_pago
+            'id': self.id,
+            'monto': self.monto,
+            'fecha_pago': self.fecha_pago
         })
 
     @classmethod
     def from_json(cls, data: str) -> 'Pago':
         data_dict = json.loads(data)
         return cls(
-            id=data_dict['id'],
-            monto=data_dict['monto'],
-            fecha_pago=data_dict['fecha_pago']
+            id = data_dict['id'],
+            monto = data_dict['monto'],
+            fecha_pago = data_dict['fecha_pago']
         )

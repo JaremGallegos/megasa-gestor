@@ -65,5 +65,5 @@ class Empleado(ABC):
             'id': self.id,
             'nombre': self.nombre,
             'email': self.email,
-            'usuario': self.usuario.to_json() if self._usuario is not None else None
+            'usuario': self.usuario.to_json() if self.usuario is not None else None
         })
