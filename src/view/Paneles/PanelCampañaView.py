@@ -1,4 +1,4 @@
-from src.controller.CampanaController import CampanaController
+from src.controller.CampanaController import CampañaController
 import os
 
 class PanelCampañaView:
