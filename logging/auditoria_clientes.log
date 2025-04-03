@@ -7,3 +7,29 @@
 2025-04-03 12:48:49,259 - INFO - Registro de auditoria: Se agrego un nuevo cliente con id 2.
 2025-04-03 12:50:12,491 - INFO - Registro de auditoria: Se agrego un nuevo cliente con id 1.
 2025-04-03 13:13:05,256 - INFO - Registro de auditoria: Se agrego un nuevo cliente con id 1.
+2025-04-03 16:11:27,814 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:16:27,845 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:17:06,778 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:17:06,778 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 1.
+2025-04-03 16:17:27,606 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:17:27,606 - INFO - Registro de auditoría: Se finalizó la campaña con id 1.
+2025-04-03 16:18:17,981 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:18:17,981 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 2.
+2025-04-03 16:18:37,205 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:18:37,205 - INFO - Registro de auditoría: Se registró un pago en la campaña con id 1.
+2025-04-03 16:21:28,877 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:21:52,257 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:21:52,257 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 1.
+2025-04-03 16:26:47,394 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:27:23,801 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:27:23,801 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 1.
+2025-04-03 16:31:16,780 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:31:44,396 - ERROR - Error al decodificar JSON: Expecting value: line 5 column 25 (char 75)
+2025-04-03 16:32:03,209 - ERROR - Error al guardar campañas en JSON: Object of type date is not JSON serializable
+2025-04-03 16:32:03,209 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 1.
+2025-04-03 16:43:54,403 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:47:22,834 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-03 16:47:50,888 - INFO - Registro de auditoría: Se agrego una nueva campaña con id 1.
+2025-04-03 16:49:42,882 - ERROR - Error al finalizar la campaña con id 1: 'str' object has no attribute 'strftime'
+2025-04-03 16:50:20,938 - ERROR - Error al registrar pago en la campaña con id 1: 'str' object has no attribute 'strftime'
+2025-04-03 16:51:04,266 - ERROR - Error al registrar pago en la campaña con id 1: 'str' object has no attribute 'strftime'

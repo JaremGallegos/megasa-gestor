@@ -33,13 +33,13 @@ class Campana:
                  cliente: Cliente = None) -> None:
         self._id = id
         self._titulo = titulo
-        self._fecha_inicio = str_to_date(fecha_inicio) if isinstance(fecha_inicio, str) else fecha_inicio
-        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista) if isinstance(fecha_fin_prevista, str) else fecha_fin_prevista
+        self._fecha_inicio = str_to_date(fecha_inicio) if isinstance(fecha_inicio, str) and fecha_inicio.strip() != "" else None
+        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista) if isinstance(fecha_fin_prevista, str) and fecha_fin_prevista.strip() != "" else None
         self._costes_estimados = costes_estimados
         self._presupuesto = presupuesto
         self._costes_reales = costes_reales
         self._estado = estado
-        self._fecha_finalizacion = str_to_date(fecha_finalizacion) if fecha_finalizacion else None
+        self._fecha_finalizacion = str_to_date(fecha_finalizacion) if fecha_finalizacion and fecha_finalizacion.strip() != "" else None
         self._pagos = pagos if pagos is not None else []
         self._anuncios = anuncios if anuncios is not None else []
         self._empleados = empleados if empleados is not None else []
@@ -63,11 +63,11 @@ class Campana:
 
     @property
     def fecha_inicio(self) -> str:
-        return self._fecha_inicio
+        return self._fecha_inicio if self._fecha_inicio else None
     
     @fecha_inicio.setter
     def fecha_inicio(self, fecha_inicio: str) -> None:
-        self._fecha_inicio = str_to_date(fecha_inicio)
+        self._fecha_inicio = str_to_date(fecha_inicio) if fecha_inicio and fecha_inicio.strip() else None
 
     @property
     def fecha_fin_prevista(self) -> str:
@@ -217,8 +217,8 @@ class Campana:
         return json.dumps({
             'id': self.id,
             'titulo': self.titulo,
-            'fecha_inicio': date_to_str(self.fecha_inicio),
-            'fecha_fin_prevista': date_to_str(self.fecha_fin_prevista),
+            'fecha_inicio': date_to_str(self.fecha_inicio) if self.fecha_inicio else None,
+            'fecha_fin_prevista': date_to_str(self.fecha_fin_prevista) if self.fecha_fin_prevista else None,
             'costes_estimados': self.costes_estimados,
             'presupuesto': self.presupuesto,
             'costes_reales': self.costes_reales,
@@ -234,13 +234,13 @@ class Campana:
     def from_json(cls, data: str) -> 'Campana':
         data_dict = json.loads(data)
         return cls(
-            id=data_dict['id'],
-            titulo=data_dict['titulo'],
-            fecha_inicio=data_dict['fecha_inicio'],
-            fecha_fin_prevista=data_dict['fecha_fin_prevista'],
-            costes_estimados=data_dict['costes_estimados'],
-            presupuesto=data_dict['presupuesto'],
-            costes_reales=data_dict['costes_reales'],
-            estado=data_dict['estado'],
-            fecha_finalizacion=data_dict['fecha_finalizacion']
+            id = data_dict['id'],
+            titulo = data_dict['titulo'],
+            fecha_inicio = data_dict['fecha_inicio'],
+            fecha_fin_prevista = data_dict['fecha_fin_prevista'],
+            costes_estimados = data_dict['costes_estimados'],
+            presupuesto = data_dict['presupuesto'],
+            costes_reales = data_dict['costes_reales'],
+            estado = data_dict['estado'],
+            fecha_finalizacion = data_dict['fecha_finalizacion']
         )

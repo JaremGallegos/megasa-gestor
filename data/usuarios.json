@@ -3,5 +3,10 @@
         "username": "Jarem",
         "password": "1111",
         "rol": "DIRECTOR_CAMPA\u00d1A"
+    },
+    {
+        "username": "Luis",
+        "password": "2222",
+        "rol": "PERSONAL_CREATIVO"
     }
 ]

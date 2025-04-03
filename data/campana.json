@@ -1,0 +1,17 @@
+[
+    {
+        "id": 1,
+        "titulo": "Hola",
+        "fecha_inicio": "2025-06-01",
+        "fecha_fin_prevista": "2025-08-31",
+        "costes_estimados": 15000.5,
+        "presupuesto": 20000.0,
+        "costes_reales": 0.0,
+        "estado": "En ejecuci\u00f3n",
+        "fecha_finalizacion": null,
+        "pagos": [],
+        "anuncios": [],
+        "empleados": [],
+        "cliente": null
+    }
+]

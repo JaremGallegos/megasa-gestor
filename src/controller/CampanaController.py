@@ -1,5 +1,7 @@
 from __future__ import annotations
 from src.model.Campana import Campana
+from src.model.Pago import Pago
+from src.model.Empleado import Empleado
 from typing import List
 import json, os, logging
 
@@ -43,25 +45,10 @@ class CampañaController:
         return []
     
     def guardar_campañas(self) -> None:
-        """
-        Guardar las campañas en el archivo JSON.
-        Se sobreescribe el archivo con la lista actualizada.
-        """
-        data = [{
-            'id': campaña.id,
-            'titulo': campaña.titulo,
-            'fecha_inicio': campaña.fecha_inicio,
-            'fecha_fin_prevista': campaña.fecha_fin_prevista,
-            'costes_estimados': campaña.costes_estimados,
-            'presupuesto': campaña.presupuesto,
-            'costes_reales': campaña.costes_reales,
-            'estado': campaña.estado,
-            'fecha_finalizacion': campaña.fecha_finalizacion
-        } for campaña in self.campañas]
-        
+        data = [json.loads(campaña.to_json()) for campaña in self.campañas]
         try:
-            with open(self.file_path, 'w') as file:
-                json.dump(data, file, indent = 4)
+            with open(self.file_path, 'w', encoding='utf-8') as file:
+                json.dump(data, file, indent=4)
         except Exception as e:
             logging.error("Error al guardar campañas en JSON: %s", e)
             
@@ -81,7 +68,11 @@ class CampañaController:
         Si la operación es exitosa, se guarda el archivo JSON y se registra la acción para auditoría.
         
         Args:
-            titulo (str): Titulo de la Campaña
+            titulo (str): Título de la campaña.
+            fecha_inicio (str): Fecha de inicio (formato "YYYY-MM-DD").
+            fecha_fin_prevista (str): Fecha fin prevista (formato "YYYY-MM-DD").
+            costes_estimados (float): Costes estimados de la campaña.
+            presupuesto (float): Presupuesto asignado.
         
         Returns:
             bool: True si se registró exitosamente, False en caso de duplicado. 
@@ -90,9 +81,93 @@ class CampañaController:
             logging.error("Error: Ya existe una campaña con el mismo título")
             return False
         
+        nueva_id = max((c.id for c in self.campañas), default = 0) + 1
+        
         nueva_campaña = Campana()
         nueva_campaña.registrar_campana(titulo, fecha_inicio, fecha_fin_prevista, costes_estimados, presupuesto)
+        nueva_campaña.id = nueva_id
         self.campañas.append(nueva_campaña)
         self.guardar_campañas()
         logging.info("Registro de auditoría: Se agrego una nueva campaña con id %s.", nueva_campaña.id)
         return True
+    
+    def registrar_finalizacion_campaña(self, id: int) -> bool:
+        """
+        UC3: Registrar Finalización de Campaña Publicitaria
+        Finaliza la campaña verificando que se encuentre en ejecución y actualiza el estado
+        a 'Finalizada', registrando la fecha de finalización.
+        
+        Args:
+            id (int): Identificador de la campaña a finalizar.
+        
+        Returns:
+            bool: True si la campaña se finalizó correctamente, False en caso de error o duplicidad.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                try:
+                    campaña.registrar_finalizacion()
+                    self.guardar_campañas()
+                    logging.info("Registro de auditoría: Se finalizó la campaña con id %s.", id)
+                    return True
+                except Exception as e:
+                    logging.error("Error al finalizar la campaña con id %s: %s", id, e)
+                    return False
+                
+        logging.error("Campaña con id %s no encontrada para finalización.", id)
+        return False
+        
+    def registrar_pago_campaña(self, id: int, pago: Pago) -> bool:
+        """
+        UC4: Registrar Pago de Campaña
+        Registra un pago parcial en la campaña especificada. Se valida la existencia de la campaña
+        y se asocia el pago a ella, actualizando la persistencia y registrando la operación para auditoría.
+
+        Args:
+            id (int): Identificador de la campaña.
+            pago (Pago): Objeto Pago con los datos del pago a registrar.
+        
+        Returns:
+            bool: True si el pago se registró correctamente, False en caso de error.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                try:
+                    campaña.agregar_pago(pago)
+                    self.guardar_campañas()
+                    logging.info("Registro de auditoría: Se registró un pago en la campaña con id %s.", id)
+                    return True
+                except Exception as e:
+                    logging.error("Error al registrar pago en la campaña con id %s: %s", id, e)
+                    return False
+        
+        logging.error("Campaña con id %s no encontrada para registrar pago.", id)
+        return False
+    
+    def consultar_pagos_campaña(self, id: int) -> list:
+        """
+        UC5: Consultar Pagos de Campaña
+        Recupera y retorna la lista de pagos asociados a la campaña especificada.
+        
+        Args:
+            id (int): Identificador de la campaña.
+        
+        Returns:
+            list: Lista de objetos Pago asociados a la campaña. Si no hay pagos, 
+            se retorna una lista vacía.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                if campaña.pagos:
+                    return campaña.pagos
+                else:
+                    logging.info("No hay pagos registrados para la campaña con id %s.", id)
+                    return []
+                
+        logging.error("Campaña con id %s no encontrada para consultar pagos.", id)
+        return []
+    
+    def asignar_empleados_campaña(self, empleado: Empleado) -> bool:
+        """
+        UC6: Asignar Empleados a Campaña
+        """
