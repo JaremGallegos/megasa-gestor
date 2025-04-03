@@ -34,24 +34,24 @@ class MainView:
                 if rol.value[1] == "Director Campaña":
                     return username, rol
                 elif rol.value[1] == "Personal Contacto":
-                    pass
+                    return username, rol
                 elif rol.value[1] == "Personal Creativo":
-                    pass
+                    return username, rol
                 elif rol.value[1] == "Personal Contable":
-                    pass
+                    return username, rol
             elif opcion == '2':
                 if rol.value[1] == "Director Campaña":
-                    pass
+                    return username, rol
                 elif rol.value[1] == "Personal Contacto":
-                    pass
+                    return username, rol
                 elif rol.value[1] == "Personal Contable":
-                    pass
+                    return username, rol
             elif opcion == '3':
                 if rol.value[1] == "Director Campaña":
-                    pass
+                    return username, rol
             elif opcion == '4':
                 if rol.value[1] == "Director Campaña":
-                    pass
+                    return username, rol
             elif opcion == '9':
                 pass
             elif opcion == '0':

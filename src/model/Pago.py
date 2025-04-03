@@ -34,12 +34,6 @@ class Pago:
     def registrar_pago(self) -> None:
         # Lógica para registrar el pago
         pass
-
-    def get_monto(self) -> float:
-        return self._monto
-
-    def get_fecha_pago(self) -> str:
-        return self._fecha_pago
     
     def to_json(self) -> str:
         return json.dumps({

@@ -12,16 +12,16 @@ class NotaConceptual:
         return self._id
     
     @id.setter
-    def id(self, value: int):
-        self._id = value
+    def id(self, id: int):
+        self._id = id
 
     @property
     def descripcion(self) -> str:
         return self._descripcion
     
     @descripcion.setter
-    def descripcion(self, value: str):
-        self._descripcion = value
+    def descripcion(self, descripcion: str):
+        self._descripcion = descripcion
 
     @property
     def fecha(self) -> str:
@@ -34,12 +34,6 @@ class NotaConceptual:
     def registrar_nota(self) -> None:
         # Lógica para registrar nota
         pass
-
-    def modificar_nota(self, nueva_descripcion: str) -> None:
-        self._descripcion = nueva_descripcion
-
-    def consultar_nota(self) -> str:
-        return self._descripcion
 
     def to_json(self) -> str:
         return json.dumps({

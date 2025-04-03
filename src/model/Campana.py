@@ -210,9 +210,6 @@ class Campana:
 
     def registrar_gasto(self, gasto: float) -> None:
         self._costes_reales += gasto
-
-    def consultar_gastos(self) -> float:
-        return self._costes_reales
     
     def to_json(self) -> str:
         return json.dumps({

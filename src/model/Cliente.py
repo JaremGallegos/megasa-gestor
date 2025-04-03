@@ -8,7 +8,7 @@ class Cliente:
     def __init__(self, 
                  id: int = 0, 
                  nombre: str = "", 
-                 direccion: str = 2, 
+                 direccion: str = "", 
                  detalle_contacto: str = "", 
                  campañas: List[Campana] = None) -> None:
         self._id = id;

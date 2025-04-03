@@ -56,9 +56,6 @@ class Anuncio:
         
         self._estado = "Finalizado"
 
-    def actualizar_estado(self, nuevo_estado: str) -> None:
-        self._estado = nuevo_estado
-
     def to_json(self) -> str:
         return json.dumps({
             'id': self._id,

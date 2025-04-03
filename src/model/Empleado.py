@@ -1,22 +1,20 @@
 from __future__ import annotations
+from abc import abstractmethod, ABC
 from src.model.Usuario import Usuario
 from src.model.CategoriaLaboral import CategoriaLaboral
 import json
 
-class Empleado:
+class Empleado(ABC):
+    ultimo_id: int = 0
     def __init__(self, 
-                 id: int, 
-                 nombre: str, 
-                 email: str, 
-                 rol: str, 
-                 usuario: Usuario, 
-                 categoria: CategoriaLaboral):
+                 id: int = 0, 
+                 nombre: str = "", 
+                 email: str = "", 
+                 usuario: Usuario = None) -> None:
         self._id = id
         self._nombre = nombre
         self._email = email
-        self._rol = rol
-        self._usuario = usuario
-        self._categoria = categoria
+        self._usuario = usuario if usuario is not None else None
     
     @property
     def id(self) -> int:
@@ -43,14 +41,6 @@ class Empleado:
         self._email = value
 
     @property
-    def rol(self) -> str:
-        return self._rol
-    
-    @rol.setter
-    def rol(self, value: str):
-        self._rol = value
-
-    @property
     def usuario(self) -> Usuario:
         return self._usuario
     
@@ -58,44 +48,22 @@ class Empleado:
     def usuario(self, value: Usuario):
         self._usuario = value
 
-    @property
-    def categoria(self) -> CategoriaLaboral:
-        return self._categoria
-    
-    @categoria.setter
-    def categoria(self, value: CategoriaLaboral):
-        self._categoria = value
-        
-    def actualizar_datos(self) -> None:
-        # Lógica para actualizar datos del empleado
+    @abstractmethod
+    def registrar_empleado(self, nombre: str, email: str, usuario: Usuario) -> None:
         pass
-
-    def asignar_a_rol(self, nuevo_rol: str) -> None:
-        self._rol = nuevo_rol
-
-    def obtener_perfil(self) -> str:
-        return f"ID: {self._id}, Nombre: {self._nombre}, Email: {self._email}, Rol: {self._rol}"
+    
+    @abstractmethod
+    def actualizar_datos(self, nombre: str = None, email: str = None, usuario: Usuario = None) -> None:
+        pass
+    
+    @abstractmethod
+    def asignar_usuario(self) -> None:
+        pass
     
     def to_json(self) -> str:
         return json.dumps({
-            'id': self._id,
-            'nombre': self._nombre,
-            'email': self._email,
-            'rol': self._rol,
-            'usuario': self._usuario.to_json(),
-            'categoria': self._categoria.to_json()
+            'id': self.id,
+            'nombre': self.nombre,
+            'email': self.email,
+            'usuario': self.usuario.to_json() if self._usuario is not None else None
         })
-
-    @classmethod
-    def from_json(cls, data: str) -> 'Empleado':
-        data_dict = json.loads(data)
-        usuario = Usuario.from_json(data_dict['usuario'])
-        categoria = CategoriaLaboral.from_json(data_dict['categoria'])
-        return cls(
-            id=data_dict['id'],
-            nombre=data_dict['nombre'],
-            email=data_dict['email'],
-            rol=data_dict['rol'],
-            usuario=usuario,
-            categoria=categoria
-        )
