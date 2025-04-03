@@ -1,8 +1,10 @@
 from __future__ import annotations
-from typing import List
 from src.model.Campana import Campana
+from typing import List
+import json
 
 class Cliente:
+    ultimo_id: int = 0
     def __init__(self, 
                  id: int, 
                  nombre: str, 
@@ -55,34 +57,56 @@ class Cliente:
     def campañas(self, campañas: List[Campana]) -> None:
         self._campañas = campañas
         
-    def registrar_cliente(self) -> None:
-        pass
+    def registrar_cliente(self, nombre: str, direccion: str, detalle_contacto: str) -> None:
+        """
+        Registra un cliente asignándole un id atogenerado
+        La asignación del id se realiza mediante un autoincremente en la variable de clase.
+        """
+        Cliente.ultimo_id += 1
+        self.id = Cliente.ultimo_id
+        self.nombre = nombre 
+        self.direccion = direccion
+        self.detalle_contacto = detalle_contacto
+        
+        print(f"Cliente registrado: id = {self.id}, nombre = {self.nombre}")
     
     def actualizar_datos(self, nombre: str = None, direccion: str = None, detalle_contacto: str = None) -> None:
-        if nombre:
+        """
+        Actualiza los datos del cliente.
+        Si se proporciona un nuevo valor, se actualiza; de lo contrario, mantiene el valor actual.
+        """
+        if nombre is not None:
             self.nombre = nombre
-        if direccion:
-            self.detalle_contacto = direccion
-        if detalle_contacto:
+        if direccion is not None:
+            self.direccion = direccion
+        if detalle_contacto is not None:
             self.detalle_contacto = detalle_contacto
         
-        print("Datos del cliente actualizados")
+        print("Datos del cliente actualizado")
     
-    def consultar_campañas(self) -> List[Campana]:
-        print("Consultando campañas asociadas al cliente...")
-        return self.campañas
-    
-    def to_dict(self) -> str:
-        return {
+    def to_json(self) -> str:
+        """
+        Convierte el objeto Cliente en una cadena JSON
+        """
+        return json.dumps({
             'id': self.id,
             'nombre': self.nombre,
             'direccion': self.direccion,
             'detalle_contacto': self.detalle_contacto,
-            'campañas': [campana.to_dict() for campana in self.campañas]
-        }
+            'campañas': [campana.to_json() for campana in self.campañas]
+        })
         
     @classmethod
-    def from_dict(cls, data: dict) -> 'Cliente':
-        cliente = cls(data['id'], data['nombre'], data['direccion'], data['detalle_contacto'])
-        from src.model.Campana import Campana
-        cliente.campañas = [Campana.form_dict(campana_data) for campana_data in data.get('campanas', [])]
+    def from_json(cls, data: str) -> 'Cliente':
+        """
+        Crea un objeto Cliente a partir de una cadena JSON.
+        """
+        data_dict: dict = json.loads(data)
+        campañas = [Campana.from_json(c_json) for c_json in data_dict.get('campañas', [])]
+        return cls(
+            id = data_dict['id'],
+            nombre = data_dict['nombre'],
+            direccion = data_dict['direccion'],
+            detalle_contacto = data_dict['detalle_contacto'],
+            campañas = campañas
+        )

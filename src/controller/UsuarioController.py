@@ -1,4 +1,5 @@
 from src.model.Usuario import Usuario
+from src.model.CategoriaLaboral import CategoriaLaboral
 import json, os
 
 class UsuarioController:
@@ -16,7 +17,11 @@ class UsuarioController:
                     data = json.load(file)
                     usuarios = {}
                     for u in data:
-                        usuario = Usuario(u['username'], u['password'])
+                        usuario = Usuario(
+                            username = u['username'], 
+                            password = u['password'],
+                            rol = CategoriaLaboral[u['rol']]
+                        )
                         usuarios[usuario.username] = usuario
                     return usuarios
                 except json.JSONDecodeError:
@@ -31,7 +36,8 @@ class UsuarioController:
         for usuario in self.usuarios.values():
             data.append({
                 'username': usuario.username,
-                'password': usuario.password
+                'password': usuario.password,
+                'rol': usuario.rol.name
             })
         with open(self.file_path, 'w') as file:
             json.dump(data, file, indent = 4)
@@ -45,13 +51,13 @@ class UsuarioController:
             return True
         return False
     
-    def registrar_usuario(self, username: str, password: str) -> bool:
+    def registrar_usuario(self, username: str, password: str, rol: CategoriaLaboral) -> bool:
         """
         Registra un nuevo usuario si no existe.
         """
         if username in self.usuarios:
             return False
-        nuevo_usuario = Usuario(username, password)
+        nuevo_usuario = Usuario(username, password, rol)
         self.usuarios[username] = nuevo_usuario
         self.guardar_usuarios()
         return True
@@ -61,7 +67,7 @@ class UsuarioController:
         Actualiza la contraseña de un usuario existente.
         """
         if username in self.usuarios:
-            self.usuarios[username].cambiar_password(nuevo_password)
+            self.usuarios[username].password(nuevo_password)
             self.guardar_usuarios()
             return True
         return False

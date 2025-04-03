@@ -1,6 +1,22 @@
 [
     {
         "username": "Jarem",
-        "password": "1234"
+        "password": "1234",
+        "rol": "DIRECTOR_CAMPA\u00d1A"
+    },
+    {
+        "username": "Joseph",
+        "password": "2212",
+        "rol": "PERSONAL_CREATIVO"
+    },
+    {
+        "username": "Jareml",
+        "password": "21",
+        "rol": "PERSONAL_CONTABLE"
+    },
+    {
+        "username": "Luis",
+        "password": "1111",
+        "rol": "PERSONAL_CONTACTO"
     }
 ]
