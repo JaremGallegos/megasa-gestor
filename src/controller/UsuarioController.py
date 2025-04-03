@@ -1,5 +1,9 @@
 from src.model.Usuario import Usuario
 from src.model.CategoriaLaboral import CategoriaLaboral
+from src.model.DirectorCampana import DirectorCampana
+from src.model.PersonalContable import PersonalContable
+from src.model.PersonalContacto import PersonalContacto
+from src.model.PersonalCreativo import PersonalCreativo
 import json, os
 
 class UsuarioController:
@@ -51,7 +55,7 @@ class UsuarioController:
             return True
         return False
     
-    def registrar_usuario(self, username: str, password: str, rol: CategoriaLaboral) -> bool:
+    def registrar_usuario(self, nombre: str, email: str, username: str, password: str, rol: CategoriaLaboral) -> bool:
         """
         Registra un nuevo usuario si no existe.
         """
@@ -59,6 +63,19 @@ class UsuarioController:
             return False
         nuevo_usuario = Usuario(username, password, rol)
         self.usuarios[username] = nuevo_usuario
+        
+        if rol == CategoriaLaboral.DIRECTOR_CAMPAÑA:
+            empleado = DirectorCampana(nombre = nombre, email = email, usuario = nuevo_usuario)
+        elif rol == CategoriaLaboral.PERSONAL_CONTABLE:
+            empleado = PersonalContable(nombre = nombre, email = email, usuario = nuevo_usuario)
+        elif rol == CategoriaLaboral.PERSONAL_CONTACTO:
+            empleado = PersonalContacto(nombre = nombre, email = email, usuario = nuevo_usuario)
+        elif rol == CategoriaLaboral.PERSONAL_CREATIVO:
+            empleado = PersonalCreativo(nombre = nombre, email = email, usuario = nuevo_usuario)
+        else:
+            return False
+        
+        empleado.registrar_empleado(nombre, email, nuevo_usuario)
         self.guardar_usuarios()
         return True
     

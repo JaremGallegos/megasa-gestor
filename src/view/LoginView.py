@@ -40,6 +40,8 @@ class UsuarioView:
             elif opcion == '2':
                 username = input("Ingrese nuevo usuario: ")
                 password = input("Ingrese nueva contraseña: ")
+                nombre = input("Ingrese nombre completo: ")
+                email = input("Ingrese email: ")
                 
                 print("Seleccione una categoria laboral:")
                 for rol in CategoriaLaboral:
@@ -56,7 +58,7 @@ class UsuarioView:
                     print("Categoría laboral no válida.")
                     input("Presione Enter para continuar...")
                 else:
-                    if self.controller.registrar_usuario(username, password, rol_seleccionado):
+                    if self.controller.registrar_usuario(nombre, email, username, password, rol_seleccionado):
                         print("Usuario registrado exitosamente.")
                     else:
                         print("El usuario ya existe.")
