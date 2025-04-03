@@ -21,6 +21,8 @@ class PanelCampañaView:
             print("4. Consultar Pagos de Campaña")
             print("5. Asignar Empleados a Campaña")
             print("6. Registrar Empleado de Contacto para Campaña")
+            print("7. Registrar Gastos de Campaña")
+            print("8. Consultar Gastos de Campaña")
             print("0. Salir")
             opcion = input("Seleccione una opción: ")
             
@@ -36,6 +38,10 @@ class PanelCampañaView:
                 self.asignar_empleados_campaña()
             elif opcion == "6":
                 self.registrar_contacto_campaña()
+            elif opcion == "7":
+                self.registrar_gastos_campana()
+            elif opcion == "8":
+                self.consultar_gastos_campana()
             elif opcion == "0":
                 print("Saliendo del panel de campaña...")
                 input("Presione Enter para continuar...")
@@ -212,5 +218,48 @@ class PanelCampañaView:
             print("Empleado designado como contacto exitosamente.")
         else:
             print("Error al designar el contacto.")
+        
+        input("Presione Enter para continuar...")
+        
+    def registrar_gastos_campana(self) -> None:
+        self.limpiar_ventana()
+        print("=== Registrar Gastos de Campaña ===")
+        try:
+            id_campana = int(input("Ingrese el ID de la campaña: "))
+        except ValueError:
+            print("ID de campaña inválido.")
+            input("Presione Enter para continuar...")
+            return
+        
+        try:
+            monto = float(input("Ingrese el monto del gasto: "))
+        except ValueError:
+            print("Monto inválido. Debe ser un número.")
+            input("Presione Enter para continuar...")
+            return
+        
+        descripcion = input("Ingrese una descripción del gasto: ")
+        fecha = input("Ingrese la fecha del gasto (YYYY-MM-DD): ")
+        exito = self.controller.registrar_gastos_campana(id_campana, monto, descripcion, fecha)
+        
+        if exito:
+            print("Gasto registrado exitosamente.")
+        else:
+            print("Error al registrar el gasto. Verifique que la campaña esté en ejecución y la información sea correcta.")
+        
+        input("Presione Enter para continuar...")
+    
+    def consultar_gastos_campana(self) -> None:
+        self.limpiar_ventana()
+        print("=== Consultar Gastos de Campaña ===")
+        try:
+            id_campana = int(input("Ingrese el ID de la campaña a consultar: "))
+        except ValueError:
+            print("ID de campaña inválido.")
+            input("Presione Enter para continuar...")
+            return
+        
+        resumen = self.controller.consultar_gastos_campana(id_campana)
+        print(resumen)
         
         input("Presione Enter para continuar...")

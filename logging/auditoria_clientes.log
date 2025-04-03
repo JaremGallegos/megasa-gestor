@@ -34,3 +34,6 @@
 2025-04-03 16:50:20,938 - ERROR - Error al registrar pago en la campaña con id 1: 'str' object has no attribute 'strftime'
 2025-04-03 16:51:04,266 - ERROR - Error al registrar pago en la campaña con id 1: 'str' object has no attribute 'strftime'
 2025-04-03 17:51:59,155 - INFO - Empleado con id 1 asignado a la campaña con id 1.
+2025-04-03 18:32:39,009 - INFO - Gasto registrado en campaña id 1: monto=600.00, descripción='Mantenimiento', fecha=2025-08-04
+2025-04-03 18:35:23,499 - INFO - No hay pagos registrados para la campaña con id 1.
+2025-04-03 18:35:57,805 - ERROR - Campaña con id 3 no encontrada para registrar gasto.

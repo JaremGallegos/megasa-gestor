@@ -196,32 +196,6 @@ class Campana:
 
     def registrar_gasto(self, gasto: float) -> None:
         self.costes_reales += gasto
-
-    def imprimir_resumen_gastos(self) -> None:
-        """
-        Genera e imprime un resumen de los gastos de la campaña, comparando el presupuesto
-        con los costes reales acumulados.
-        """
-        resumen = f"Resumen de gastos para la campaña '{self.titulo}':\n"
-        resumen += f"Presupuesto: {self.presupuesto}\n"
-        resumen += f"Costes reales acumulados: {self.costes_reales}\n"
-        diferencia = self.presupuesto - self.costes_reales
-        resumen += f"Diferencia (Presupuesto - Costes reales): {diferencia}\n"
-        print(resumen)
-
-    def imprimir_factura(self) -> None:
-        """
-        Genera e imprime una factura de la campaña utilizando el detalle de los pagos realizados.
-        Se calcula el total pagado y se compara con el presupuesto para mostrar la diferencia.
-        """
-        total_pagado = sum([p.get_monto() for p in self._pagos])
-        factura = f"Factura de la campaña '{self._titulo}':\n"
-        factura += f"Presupuesto: {self._presupuesto}\n"
-        factura += f"Costes reales: {self._costes_reales}\n"
-        factura += f"Total pagado: {total_pagado}\n"
-        diferencia = self._presupuesto - total_pagado
-        factura += f"Diferencia a pagar: {diferencia}\n"
-        print(factura)
     
     def to_json(self) -> str:
         return json.dumps({

@@ -199,7 +199,8 @@ class CampañaController:
     def registrar_contacto_campaña(self, id: int, empleado: Empleado) -> bool:
         """
         UC7: Registrar Empleado de Contacto para Campaña
-        Permite designar a un empleado asignado a la campaña como contacto principal
+        Permite designar a un empleado asignado a la campaña como contacto 
+        principal
         
         Args:
             id (int): Identificador de la campaña.
@@ -223,3 +224,60 @@ class CampañaController:
         
         logging.error("Campaña con id %s no encontrada.", id)
         return False
+    
+    def registrar_gastos_campana(self, id: int, monto: float, descripcion: str, fecha: str) -> bool:
+        """
+        UC10: Registrar Gastos de Campaña
+        Permite ingresar y actualizar los gastos reales incurridos durante la 
+        ejecución de una campaña.
+        
+        Args:
+            id (int): Identificador de la campaña.
+            monto (float): Monto del gasto.
+            descripcion (str): Descripción del gasto.
+            fecha (str): Fecha del gasto (formato "YYYY-MM-DD").
+            
+        Returns:
+            bool: True si se registra el gasto correctamente, False en caso de error.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                if campaña.estado != "En ejecución":
+                    logging.error("La campaña con id %s no está en ejecución.", id)
+                    return False
+                
+                prev = campaña.costes_reales
+                try:
+                    campaña.registrar_gasto(monto)
+                    self.guardar_campañas()
+                    logging.info("Gasto registrado en campaña id %s: monto=%.2f, descripción='%s', fecha=%s", id, monto, descripcion, fecha)
+                    return True
+                except Exception as e:
+                    campaña.costes_reales = prev
+                    logging.error("Error al registrar gasto en campaña id %s: %s", id, e)
+                    return False
+        
+        logging.error("Campaña con id %s no encontrada para registrar gasto.", id)
+        return False
+    
+    def consultar_gastos_campana(self, id: int) -> str:
+        """
+        UC11: Consultar Gastos de Campaña
+        Retorna un resumen de los gastos incurridos en una campaña.
+        
+        Args:
+            id (int): Identificador de la campaña.
+            
+        Returns:
+            str: Resumen de gastos o mensaje informativo si no se encuentra la campaña.
+        """
+        for campaña in self.campañas:
+            if campaña.id == id:
+                resumen = f"Resumen de gastos para la campaña '{campaña.titulo}':\n"
+                resumen += f"Presupuesto: {campaña.presupuesto}\n"
+                resumen += f"Costes reales acumulados: {campaña.costes_reales}\n"
+                diferencia = campaña.presupuesto - campaña.costes_reales
+                resumen += f"Diferencia (Presupuesto - Costes reales): {diferencia}\n"
+                return resumen
+        
+        return f"Campaña con id {id} no encontrada."
