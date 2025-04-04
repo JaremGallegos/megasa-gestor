@@ -62,7 +62,7 @@ class Cliente:
     def registrar_cliente(self, nombre: str, direccion: str, detalle_contacto: str) -> None:
         """
         Registra un cliente asignándole un id atogenerado
-        La asignación del id se realiza mediante un autoincremente en la variable de clase.
+        La asignación del id se realiza mediante un autoincremento en la variable de clase.
         """
         Cliente.ultimo_id += 1
         self.id = Cliente.ultimo_id

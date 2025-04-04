@@ -16,33 +16,18 @@ class CategoriaLaboral(Enum):
         self._nombre = nombre
         self._sueldo_base = sueldo_base
         
-    def __str__(self) -> str:
-        return self.nombre
-        
     @property
     def id(self) -> int:
         return self._id
-    
-    @id.setter
-    def id(self, id: int) -> None:
-        self._id = id
 
     @property
     def nombre(self) -> str:
         return self._nombre
     
-    @nombre.setter
-    def nombre(self, nombre: str) -> None:
-        self._nombre = nombre
-
     @property
     def sueldo_base(self) -> float:
         return self._sueldo_base
     
-    @sueldo_base.setter
-    def sueldo_base(self, sueldo_base: float) -> None:
-        self._sueldo_base = sueldo_base
-
     def to_json(self) -> str:
         """
         Convierte el objeto CategoriaLaboral en una cadena JSON.
@@ -57,10 +42,11 @@ class CategoriaLaboral(Enum):
     def from_json(cls, data: str) -> 'CategoriaLaboral':
         """
         Crea un objeto CategoriaLaboral a partir de una cadena JSON.
+        Se busca en el Enum el miembro que coincida con el id proporcionado.
         """
         data_dict = json.loads(data)
-        return cls(
-            id = data_dict['id'],
-            nombre = data_dict['nombre'],
-            sueldo_base = data_dict['sueldo_base']
-        )
+        for categoria in cls:
+            if categoria.id == data_dict["id"]:
+                return categoria
+        
+        raise ValueError("Categoría no encontrada en el Enum")
