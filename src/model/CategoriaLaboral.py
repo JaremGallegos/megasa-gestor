@@ -8,7 +8,10 @@ class CategoriaLaboral(Enum):
     PERSONAL_CONTACTO = (3, "Personal Contacto", 700.0)
     PERSONAL_CREATIVO = (4, "Personal Creativo", 600.0)
     
-    def __init__(self, id: int, nombre: str, sueldo_base: float) -> None:
+    def __init__(self, 
+                 id: int = 0, 
+                 nombre: str = "", 
+                 sueldo_base: float = 0.0) -> None:
         self._id = id
         self._nombre = nombre
         self._sueldo_base = sueldo_base
@@ -21,7 +24,7 @@ class CategoriaLaboral(Enum):
         return self._id
     
     @id.setter
-    def id(self, id: int):
+    def id(self, id: int) -> None:
         self._id = id
 
     @property
@@ -29,7 +32,7 @@ class CategoriaLaboral(Enum):
         return self._nombre
     
     @nombre.setter
-    def nombre(self, nombre: str):
+    def nombre(self, nombre: str) -> None:
         self._nombre = nombre
 
     @property
@@ -37,7 +40,7 @@ class CategoriaLaboral(Enum):
         return self._sueldo_base
     
     @sueldo_base.setter
-    def sueldo_base(self, sueldo_base: float):
+    def sueldo_base(self, sueldo_base: float) -> None:
         self._sueldo_base = sueldo_base
 
     def to_json(self) -> str:

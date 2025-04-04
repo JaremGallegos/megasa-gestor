@@ -173,7 +173,7 @@ class Campana:
         self.presupuesto = presupuesto        
         self.estado = "En ejecución"
 
-        print(f"Campaña '{self.titulo}' registrada correctamente con estado '{self._estado}'.")
+        print(f"Campaña '{self.titulo}' registrada correctamente con estado '{self.estado}'.")
 
     def registrar_finalizacion(self) -> None:
         """

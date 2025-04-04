@@ -2,7 +2,10 @@ from __future__ import annotations
 import json
 
 class Pago:
-    def __init__(self, id: int, monto: float, fecha_pago: str):
+    def __init__(self, 
+                 id: int = 0, 
+                 monto: float = 0.0, 
+                 fecha_pago: str = ""):
         self._id = id
         self._monto = monto
         self._fecha_pago = fecha_pago
@@ -12,24 +15,24 @@ class Pago:
         return self._id
     
     @id.setter
-    def id(self, value: int):
-        self._id = value
+    def id(self, id: int):
+        self._id = id
 
     @property
     def monto(self) -> float:
         return self._monto
     
     @monto.setter
-    def monto(self, value: float):
-        self._monto = value
+    def monto(self, monto: float):
+        self._monto = monto
 
     @property
     def fecha_pago(self) -> str:
         return self._fecha_pago
     
     @fecha_pago.setter
-    def fecha_pago(self, value: str):
-        self._fecha_pago = value
+    def fecha_pago(self, fecha_pago: str):
+        self._fecha_pago = fecha_pago
         
     def registrar_pago(self) -> None:
         # Lógica para registrar el pago

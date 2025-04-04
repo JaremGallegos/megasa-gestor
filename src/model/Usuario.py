@@ -13,16 +13,16 @@ class Usuario:
         return self._username
     
     @username.setter
-    def username(self, value: str) -> None:
-        self._username = value
+    def username(self, username: str) -> None:
+        self._username = username
 
     @property
     def password(self) -> str:
         return self._password
     
     @password.setter
-    def password(self, value: str) -> None:
-        self._password = value
+    def password(self, password: str) -> None:
+        self._password = password
         
     @property
     def rol(self) -> CategoriaLaboral:

@@ -21,32 +21,32 @@ class Empleado(ABC):
         return self._id
     
     @id.setter
-    def id(self, value: int):
-        self._id = value
+    def id(self, id: int) -> None:
+        self._id = id
 
     @property
     def nombre(self) -> str:
         return self._nombre
     
     @nombre.setter
-    def nombre(self, value: str):
-        self._nombre = value
+    def nombre(self, nombre: str) -> None:
+        self._nombre = nombre
 
     @property
     def email(self) -> str:
         return self._email
     
     @email.setter
-    def email(self, value: str):
-        self._email = value
+    def email(self, email: str) -> None:
+        self._email = email
 
     @property
     def usuario(self) -> Usuario:
         return self._usuario
     
     @usuario.setter
-    def usuario(self, value: Usuario):
-        self._usuario = value
+    def usuario(self, usuario: Usuario) -> None:
+        self._usuario = usuario
 
     @abstractmethod
     def registrar_empleado(self, nombre: str, email: str, usuario: Usuario) -> None:

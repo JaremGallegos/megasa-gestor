@@ -2,7 +2,11 @@ from __future__ import annotations
 import json
 
 class Anuncio:
-    def __init__(self, id: int, descripcion: str, estado: str):
+    ultimo_id = 0
+    def __init__(self, 
+                 id: int = 0, 
+                 descripcion: str = "", 
+                 estado: str = "En preparación"):
         self._id = id
         self._descripcion = descripcion
         self._estado = estado
@@ -31,15 +35,17 @@ class Anuncio:
     def estado(self, estado: str) -> None:
         self._estado = estado
         
-    def registrar_anuncio(self) -> None:
+    def registrar_anuncio(self, descripcion: str) -> None:
         """
         Registra el anuncio validando que la descripción no esté vacía y estableciendo
         el estado inicial como 'En preparación'.
         """
-        if not self.descripcion or not self.descripcion.strip():
-            raise ValueError("La descripción del anuncio no puede estar vacía.")
-        
+        Anuncio.ultimo_id += 1
+        self.id = Anuncio.ultimo_id
+        self.descripcion = descripcion
         self.estado = "En preparación"
+        
+        print(f"Anuncio '{self.id}' registrado correctamente con estado '{self.estado}'.")
 
     def registrar_finalizacion(self) -> None:
         """
@@ -47,15 +53,12 @@ class Anuncio:
         Si el anuncio ya está finalizado, se lanza una excepción.
         En caso contrario, se actualiza el estado del anuncio a 'Finalizado'.
         """
-        if self.estado == "Finalizado":
-            raise ValueError("El anuncio ya se encuentra finalizado.")
-
-        estados_validos = ["En preparación", "En ejecución"]
-        if self.estado not in estados_validos:
-            raise ValueError("El anuncio no se puede finalizar desde el estado actual.")
-        
+        if self.estado != "En preparación":
+            raise ValueError("Solo se puede finalizar un anuncio en preparación.")
         self.estado = "Finalizado"
-
+        
+        print(f"Anuncio '{self.id}' finalizada correctamente.")
+        
     def to_json(self) -> str:
         return json.dumps({
             'id': self.id,
