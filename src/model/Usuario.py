@@ -3,10 +3,13 @@ from src.model.CategoriaLaboral import CategoriaLaboral
 import json
 
 class Usuario:
-    def __init__(self, username: str, password: str, rol: CategoriaLaboral) -> None:
+    def __init__(self, 
+                 username: str = "", 
+                 password: str = "", 
+                 rol: CategoriaLaboral = None) -> None:
         self._username = username
         self._password = password
-        self._rol = rol
+        self._rol = rol if rol is not None else []
     
     @property
     def username(self) -> str:

@@ -78,7 +78,7 @@ class CampañaController:
             bool: True si se registró exitosamente, False en caso de duplicado. 
         """
         if any(c.titulo == titulo for c in self.campañas):
-            logging.error("Error: Ya existe una campaña con el mismo título")
+            logging.error("Error: Ya existe una campaña con el mismo título.")
             return False
         
         nueva_id = max((c.id for c in self.campañas), default = 0) + 1

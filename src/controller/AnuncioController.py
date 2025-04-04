@@ -44,8 +44,41 @@ class AnuncioController:
         except Exception as e:
             logging.error("Error al guardar anuncios en JSON: %s", e)
         
-    def registrar_anuncio(self, descripcion: str, estado: str) -> bool:
+    def registrar_anuncio(self, descripcion: str) -> bool:
         """
         UC8: Registrar Anuncio de Campaña
         
         """
+        if any(a.descripcion == descripcion for a in self.anuncios):
+            logging.error("Error: Ya existe un anuncio con la misma descripción.")
+            return False
+        
+        nueva_id = max((a.id for a in self.anuncios), default = 0) + 1
+        
+        nuevo_anuncio = Anuncio()
+        nuevo_anuncio.registrar_anuncio(descripcion)
+        nuevo_anuncio.id = nueva_id
+        self.anuncios.append(nuevo_anuncio)
+        self.guardar_anuncios()
+        logging.info("Registro de auditoría: Se agrego un nuevo anuncio con id %s.", nuevo_anuncio.id)
+        return True
+        
+    def registrar_finalizacion_anuncio(self, id: int) -> bool:
+        """
+        UC9: Registrar Finalización de Anuncio
+        
+        
+        """
+        for anuncio in self.anuncios:
+            if anuncio.id == id:
+                try:
+                    anuncio.registrar_finalizacion()
+                    self.guardar_anuncios()
+                    logging.info("Registro de auditoría: Se finalizó el anuncio con id %s.", id)
+                    return True
+                except Exception as e:
+                    logging.error("Error al finalizar el anuncio con id %s: %s", id, e)
+                    return False
+                
+        logging.error("Anuncio con id %s no encontrado para finalización.", id)
+        return False

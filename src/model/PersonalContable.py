@@ -1,3 +1,4 @@
+from __future__ import annotations
 from src.model.Empleado import Empleado
 from src.model.Usuario import Usuario
 from src.model.CategoriaLaboral import CategoriaLaboral

@@ -44,8 +44,8 @@ class Campana:
         self._pagos = pagos if pagos is not None else []
         self._anuncios = anuncios if anuncios is not None else []
         self._empleados = empleados if empleados is not None else []
-        self._cliente = cliente
-        self._contacto = contacto
+        self._cliente = cliente if cliente is not None else []
+        self._contacto = contacto if contacto is not None else []
         
     @property
     def id(self) -> int:
@@ -73,11 +73,11 @@ class Campana:
 
     @property
     def fecha_fin_prevista(self) -> str:
-        return self._fecha_fin_prevista
+        return self._fecha_fin_prevista if self._fecha_fin_prevista else None
     
     @fecha_fin_prevista.setter
     def fecha_fin_prevista(self, fecha_fin_prevista: str) -> None:
-        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista)
+        self._fecha_fin_prevista = str_to_date(fecha_fin_prevista) if fecha_fin_prevista and fecha_fin_prevista.strip() else None
 
     @property
     def costes_estimados(self) -> float:
@@ -113,11 +113,11 @@ class Campana:
 
     @property
     def fecha_finalizacion(self) -> str:
-        return self._fecha_finalizacion
+        return self._fecha_finalizacion if self._fecha_finalizacion else None
     
     @fecha_finalizacion.setter
     def fecha_finalizacion(self, fecha_finalizacion: str) -> None:
-        self._fecha_finalizacion = str_to_date(fecha_finalizacion)
+        self._fecha_finalizacion = str_to_date(fecha_finalizacion) if fecha_finalizacion and fecha_finalizacion.strip() else None
 
     @property
     def pagos(self) -> List[Pago]:

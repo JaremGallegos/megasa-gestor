@@ -39,7 +39,16 @@ class Anuncio:
         """
         Registra el anuncio validando que la descripción no esté vacía y estableciendo
         el estado inicial como 'En preparación'.
+        
+        Args:
+            descripcion (str): Descripción del anuncio
+            
+        Raises:
+            ValueError: Si la descripción está vacía.
         """
+        if not descripcion.strip():
+            raise ValueError("La descripción del anuncio no puede estar vacía.")
+        
         Anuncio.ultimo_id += 1
         self.id = Anuncio.ultimo_id
         self.descripcion = descripcion
@@ -47,11 +56,14 @@ class Anuncio:
         
         print(f"Anuncio '{self.id}' registrado correctamente con estado '{self.estado}'.")
 
-    def registrar_finalizacion(self) -> None:
+    def registrar_finalizacion(self, ) -> None:
         """
         Finaliza el anuncio verificando que se encuentre en un estado válido para ser finalizado.
         Si el anuncio ya está finalizado, se lanza una excepción.
         En caso contrario, se actualiza el estado del anuncio a 'Finalizado'.
+        
+        Raises:
+            ValueError: Si el anuncio no está en estado 'En preparación'.
         """
         if self.estado != "En preparación":
             raise ValueError("Solo se puede finalizar un anuncio en preparación.")
