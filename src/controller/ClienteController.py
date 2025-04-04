@@ -63,7 +63,7 @@ class ClienteController:
             
     def listar_clientes(self) -> List[Cliente]:
         """
-        Retorna la lista de clientes registrados.
+        UC1: Retorna la lista de clientes registrados.
         
         Returns:
             List[Cliente]: Lista de clientes.

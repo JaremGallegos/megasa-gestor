@@ -1,5 +1,6 @@
 from __future__ import annotations
 from src.model.Empleado import Empleado
+from src.model.CategoriaLaboral import CategoriaLaboral
 from typing import List
 import logging, json, os
 

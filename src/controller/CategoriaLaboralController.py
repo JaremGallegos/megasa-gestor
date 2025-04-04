@@ -1,7 +1,7 @@
 from __future__ import annotations
 from src.model.CategoriaLaboral import CategoriaLaboral
-from typing import List
-import json, os, logging
+from src.util.categoria_config import cargar_config, set_sueldo_base, get_sueldo_base
+import logging
 
 logging.basicConfig(
     filename = './logging/auditoria_categoria.log',
@@ -10,14 +10,29 @@ logging.basicConfig(
 )
 
 class CategoriaLaboralController:
-    def __init__(self, file_path: str = './data/categoria.json') -> None:
-        self.file_path = file_path
-        self.categorias: List[CategoriaLaboral] = self.cargar_categorias()
+    def listar_categorias(self) -> dict:
+        """
+        UC15: Retorna la configuración actual de las categorías laborales.
         
-    def cargar_categorias(self) -> List[CategoriaLaboral]:
+        Returns:
+            dict: Diccionario con la configuración de sueldos.
         """
-        Cargar categorias laborales del archivo JSON y los almacena en una lista
+        return cargar_config()
+    
+    def actualizar_categoria(self, categoria: CategoriaLaboral, nuevo_sueldo: float) -> bool:
         """
-        if os.path.exists(self.file_path):
-            with open(self.file_path, 'r', encoding = 'utf-8') as file:
-                pass
+        UC15: Actualiza el sueldo base de la categoría y guarda la configuración.
+        
+        Args:
+            categoria (CategoriaLaboral): Categoría a actualizar.
+            nuevo_sueldo (float): Nuevo sueldo base.
+        
+        Returns:
+            bool: True si la actualización fue exitosa.
+        """
+        try:
+            set_sueldo_base(categoria, nuevo_sueldo)
+            return True
+        except Exception as e:
+            logging.error("Error al actualizar la categoria %s.", e)
+            return False

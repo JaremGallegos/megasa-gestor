@@ -34,12 +34,6 @@ class PersonalCreativo(Empleado):
             self.usuario = usuario
             
         print(f"Datos del Personal Creativo (id: {self.id}) actualizados.")
-        
-    def asignar_usuario(self) -> None:
-        """
-        Asigna un objeto Usuario al Personal Creativo
-        """
-        pass
 
     def to_json(self) -> str:
         """
