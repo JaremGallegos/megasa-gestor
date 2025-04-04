@@ -56,10 +56,6 @@ class Empleado(ABC):
     def actualizar_datos(self, nombre: str = None, email: str = None, usuario: Usuario = None) -> None:
         pass
     
-    @abstractmethod
-    def asignar_usuario(self) -> None:
-        pass
-    
     def to_json(self) -> str:
         return json.dumps({
             'id': self.id,

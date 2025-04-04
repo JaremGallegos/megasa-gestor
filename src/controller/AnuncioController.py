@@ -47,7 +47,15 @@ class AnuncioController:
     def registrar_anuncio(self, descripcion: str) -> bool:
         """
         UC8: Registrar Anuncio de Campaña
+        Valida que la descripción no esté vacía y que no exista ya un anuncio con la misma descripción.
+        Si es válido, se registra el anuncio con un estado inicial de 'En preparación', se asigna un ID único,
+        se agrega a la lista de anuncios y se guarda la operación para auditoría.
         
+        Args:
+            descripcion (str): Descripción del anuncio.
+            
+        Returns:
+            bool: True si se registró exitosamente, False en caso de duplicado o error.
         """
         if any(a.descripcion == descripcion for a in self.anuncios):
             logging.error("Error: Ya existe un anuncio con la misma descripción.")
@@ -66,8 +74,15 @@ class AnuncioController:
     def registrar_finalizacion_anuncio(self, id: int) -> bool:
         """
         UC9: Registrar Finalización de Anuncio
+        Busca el anuncio por su ID y, si está en estado 'En preparación', lo finaliza (cambia su estado a 'Finalizado')
+        y registra la fecha de finalización. Se guarda la operación para auditoría.
         
+        Args:
+            id (int): ID del anuncio a finalizar
         
+        Returns:
+            bool: True si la finalización fue exitosa, False en caso de error o si no se
+            encuentra el anuncio.
         """
         for anuncio in self.anuncios:
             if anuncio.id == id:

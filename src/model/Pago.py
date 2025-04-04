@@ -33,10 +33,6 @@ class Pago:
     @fecha_pago.setter
     def fecha_pago(self, fecha_pago: str):
         self._fecha_pago = fecha_pago
-        
-    def registrar_pago(self) -> None:
-        # Lógica para registrar el pago
-        pass
     
     def to_json(self) -> str:
         return json.dumps({

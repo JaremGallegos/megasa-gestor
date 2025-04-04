@@ -11,7 +11,7 @@ logging.basicConfig(
 )
 
 class ClienteController:
-    def __init__(self, file_path: str = "./data/clientes.json") -> None:
+    def __init__(self, file_path: str = './data/clientes.json') -> None:
         self.file_path = file_path
         self.clientes: List[Cliente] = self.cargar_clientes()
         
@@ -22,7 +22,7 @@ class ClienteController:
         if os.path.exists(self.file_path):
             with open(self.file_path, 'r') as file:
                 try:
-                    data = json.load(file)
+                    data: dict = json.load(file)
                     clientes = []
                     for c in data:
                         campañas_data = c['campañas'] if 'campañas' in c else []

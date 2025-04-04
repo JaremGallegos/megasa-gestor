@@ -38,12 +38,6 @@ class DirectorCampana(Empleado):
             
         print(f"Datos del Director de Campaña (id: {self.id}) actualizados.")
 
-    def asignar_usuario(self) -> None:
-        """
-        Asigna un objeto Usuario al Director de Campaña.
-        """
-        pass
-
     def to_json(self) -> str:
         """
         Convierte el objeto Empleado en una cadena JSON
