@@ -1,8 +1,11 @@
 from __future__ import annotations
+# Se importa la clase CategoriaLaboral del modelo.
 from src.model.CategoriaLaboral import CategoriaLaboral
-from src.util.categoria_config import cargar_config, set_sueldo_base, get_sueldo_base
+# Se importan funciones utilitarias para cargar la configuración y actualizar el sueldo base.
+from src.util.categoria_config import cargar_config, set_sueldo_base
 import logging
 
+# Configuración de logging para auditoría de categorías laborales.
 logging.basicConfig(
     filename = './logging/auditoria_categoria.log',
     level = logging.INFO,
@@ -17,6 +20,7 @@ class CategoriaLaboralController:
         Returns:
             dict: Diccionario con la configuración de sueldos.
         """
+        # Retorna la configuración actual cargada desde el archivo o recurso configurado.
         return cargar_config()
     
     def actualizar_categoria(self, categoria: CategoriaLaboral, nuevo_sueldo: float) -> bool:
@@ -31,8 +35,10 @@ class CategoriaLaboralController:
             bool: True si la actualización fue exitosa.
         """
         try:
+            # Actualiza el sueldo base utilizando la función utilitaria.
             set_sueldo_base(categoria, nuevo_sueldo)
             return True
         except Exception as e:
+            # En caso de error, se registra el error en el log.
             logging.error("Error al actualizar la categoria %s.", e)
             return False

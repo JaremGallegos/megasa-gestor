@@ -1,9 +1,11 @@
 from __future__ import annotations
+# Se importan las clases Cliente y Campana desde el modelo correspondiente.
 from src.model.Cliente import Cliente
 from src.model.Campana import Campana
 from typing import List
 import json, os, logging
 
+# Configuración de logging para auditoría de clientes.
 logging.basicConfig(
     filename = './logging/auditoria_clientes.log',
     level = logging.INFO,
@@ -12,22 +14,40 @@ logging.basicConfig(
 
 class ClienteController:
     def __init__(self, file_path: str = './data/clientes.json') -> None:
+        """
+        Inicializa el controlador de clientes, estableciendo la ruta del archivo JSON
+        y cargando la lista de clientes registrados.
+        
+        Args:
+            file_path (str): Ruta del archivo JSON que contiene los clientes.
+        """
         self.file_path = file_path
+        # Carga la lista de clientes desde el archivo JSON.
         self.clientes: List[Cliente] = self.cargar_clientes()
         
     def cargar_clientes(self) -> List[Cliente]:
         """
-        Cargar clientes del archivo JSON y los almacena en una lista
+        Carga los clientes del archivo JSON y los convierte en una lista de objetos Cliente.
+        
+        Returns:
+            List[Cliente]: Lista de clientes cargados; en caso de error o si el archivo
+                           no existe, retorna una lista vacía.
         """
+        # Verifica si el archivo existe en la ruta especificada.
         if os.path.exists(self.file_path):
-            with open(self.file_path, 'r') as file:
+            with open(self.file_path, 'r', encoding = 'utf-8') as file:
                 try:
+                    # Carga los datos JSON del archivo.
                     data: dict = json.load(file)
                     clientes = []
+                    # Itera sobre cada registro para construir los objetos Cliente.
                     for c in data:
+                        # Verifica si el cliente tiene campañas asociadas, de lo contrario asigna una lista vacía.
                         campañas_data = c['campañas'] if 'campañas' in c else []
+                        # Crea objetos Campana a partir de los datos JSON.
                         campañas_obj = [Campana.from_json(campana_data) for campana_data in campañas_data]
                         
+                        # Crea una instancia de Cliente con los datos cargados.
                         cliente = Cliente(
                             id = c['id'],
                             nombre = c['nombre'],
@@ -38,15 +58,18 @@ class ClienteController:
                         clientes.append(cliente)
                     return clientes
                 except json.JSONDecodeError as e:
+                    # Registra error si ocurre un problema al decodificar el JSON.
                     logging.error("Error al decodificar JSON: %s", e)
                     return []
+        # Retorna una lista vacía si el archivo no existe.
         return []
     
     def guardar_clientes(self) -> None:
         """
-        Guardar los clientes en el archivo JSON.
-        Se sobreescribe el archivo con la lista actualizada
+        Guarda la lista actual de clientes en el archivo JSON.
+        Se sobreescribe el archivo con la lista actualizada.
         """
+        # Prepara la información de cada cliente en formato diccionario para ser serializada.
         data = [{
             'id': cliente.id,
             'nombre': cliente.nombre,
@@ -56,9 +79,11 @@ class ClienteController:
         } for cliente in self.clientes]
         
         try:
-            with open(self.file_path, 'w') as file:
+            # Abre el archivo en modo escritura y guarda los datos en formato JSON.
+            with open(self.file_path, 'w', encoding = 'utf-8') as file:
                 json.dump(data, file, indent = 4)
         except Exception as e:
+            # Registra error en caso de fallo al guardar el archivo.
             logging.error("Error al guardar clientes en JSON: %s", e)
             
     def listar_clientes(self) -> List[Cliente]:
@@ -73,6 +98,7 @@ class ClienteController:
     def registrar_cliente(self, nombre: str, direccion: str, detalle_contacto: str) -> bool:
         """
         UC1: Registra un nuevo cliente.
+        
         Antes de registrar, se verifica que no exista ya un cliente con la misma combinación de nombre y dirección.
         Si la operación es exitosa, se guarda el archivo JSON y se registra la acción para auditoría.
         
@@ -84,14 +110,18 @@ class ClienteController:
         Returns:
             bool: True si se registró exitosamente, False en caso de duplicado.
         """
+        # Recorre la lista de clientes para detectar duplicados.
         for cliente in self.clientes:
             if cliente.nombre == nombre and cliente.direccion == direccion:
                 logging.error("Error: Ya existe un cliente con el mismo nombre y direccion.")
                 return False
         
+        # Crea un nuevo objeto Cliente y registra los datos.
         nuevo_cliente = Cliente()
         nuevo_cliente.registrar_cliente(nombre, direccion, detalle_contacto)
+        # Agrega el nuevo cliente a la lista.
         self.clientes.append(nuevo_cliente)
+        # Persiste la lista actualizada en el archivo JSON.
         self.guardar_clientes()
         logging.info("Registro de auditoria: Se agrego un nuevo cliente con id %s.", nuevo_cliente.id)
         return True
@@ -99,6 +129,7 @@ class ClienteController:
     def actualizar_cliente(self, id: int, nombre: str = None, direccion: str = None, detalle_contacto: str = None) -> bool:
         """
         UC1: Actualiza los datos de un cliente existente.
+        
         Se busca el cliente por su id y se actualizan los campos indicados. Antes de actualizar, se verifica que la nueva 
         combinación de nombre y dirección no coincida con la de otro cliente.
         
@@ -111,16 +142,21 @@ class ClienteController:
         Returns:
             bool: True si la actualización fue exitosa, False si no se encontró al cliente o existe duplicidad.
         """
+        # Busca el cliente por su identificador.
         for cliente in self.clientes:
             if cliente.id == id:
+                # Define los valores nuevos, conservando los existentes si no se especifica uno nuevo.
                 nuevo_nombre = nombre if nombre is not None else cliente.nombre
                 nueva_direccion = direccion if direccion is not None else cliente.direccion
-                                
+                
+                # Verifica que ningún otro cliente tenga la misma combinación de nombre y dirección.                                
                 if any(otro.id != id and otro.nombre == nuevo_nombre and otro.direccion == nueva_direccion for otro in self.clientes):
                     logging.error("Error: Existe otro cliente con el mismo nombre y direccion")
                     return False
-                    
+                
+                # Actualiza los datos del cliente.
                 cliente.actualizar_datos(nombre, direccion, detalle_contacto)
+                # Guarda los cambios en el archivo JSON.
                 self.guardar_clientes()
                 logging.info("Registro de auditoria: Se actualizó la información del cliente con id %s.", id)
                 return True
@@ -131,6 +167,7 @@ class ClienteController:
     def eliminar_cliente(self, id: int) -> bool:
         """
         UC1: Elimina un cliente dado su id.
+        
         Se busca el cliente y, si existe, se elimina de la lista y se actualiza el archivo JSON.
         
         Args:
@@ -139,9 +176,12 @@ class ClienteController:
         Returns:
             bool: True si se eliminó el cliente, False si no se encontró.
         """
+        # Recorre la lista de clientes con su índice para facilitar la eliminación.
         for index, cliente in enumerate(self.clientes):
             if cliente.id == id:
+                # Elimina el cliente de la lista.
                 del self.clientes[index]
+                # Persiste la lista actualizada en el archivo JSON.
                 self.guardar_clientes()
                 logging.info("Registro de auditoría: Se eliminó el cliente con id %s.", id)
                 return True
