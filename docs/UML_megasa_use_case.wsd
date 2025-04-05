@@ -1,4 +1,4 @@
-@startuml
+@startuml megasa
 ' Define system boundary
 rectangle "Sistema Mega S.A." {
   ' Use Cases para Director de Campaña
