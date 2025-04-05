@@ -1,0 +1,9 @@
+[
+    {
+        "id": 1,
+        "nombre": "Pedro",
+        "email": "a",
+        "usuario": null,
+        "tipo": "PersonalContable"
+    }
+]

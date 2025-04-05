@@ -37,3 +37,10 @@
 2025-04-03 18:32:39,009 - INFO - Gasto registrado en campaña id 1: monto=600.00, descripción='Mantenimiento', fecha=2025-08-04
 2025-04-03 18:35:23,499 - INFO - No hay pagos registrados para la campaña con id 1.
 2025-04-03 18:35:57,805 - ERROR - Campaña con id 3 no encontrada para registrar gasto.
+2025-04-04 21:05:26,339 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-04 21:09:35,619 - ERROR - Error al decodificar JSON: Expecting value: line 1 column 1 (char 0)
+2025-04-04 21:11:45,507 - INFO - Registro de auditoría: Se agregó un nuevo empleado con id 1.
+2025-04-04 21:48:12,445 - ERROR - Error al guardar anuncios en JSON: [Errno 2] No such file or directory: '/data/anuncio.json'
+2025-04-04 21:48:12,445 - INFO - Registro de auditoría: Se agrego un nuevo anuncio con id 1.
+2025-04-04 21:48:23,796 - ERROR - Error al guardar anuncios en JSON: [Errno 2] No such file or directory: '/data/anuncio.json'
+2025-04-04 21:48:23,796 - INFO - Registro de auditoría: Se finalizó el anuncio con id 1.

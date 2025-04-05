@@ -7,7 +7,7 @@ import logging, json, os
 
 # Configuración de logging para auditoría de empleados.
 logging.basicConfig(
-    filename = '/logging/auditoria_empleados.log',
+    filename = './logging/auditoria_empleados.log',
     level = logging.INFO,
     format = '%(asctime)s - %(levelname)s - %(message)s'
 )
@@ -37,7 +37,7 @@ class EmpleadoController:
         # Verifica si el archivo JSON existe en la ruta especificada.
         if os.path.exists(self.file_path):
             # Abre el archivo en modo lectura con codificación UTF-8.
-            with open(self.file_path, 'r', ecoding = 'utf-8') as file:
+            with open(self.file_path, 'r', encoding = 'utf-8') as file:
                 try:
                     # Carga el contenido del archivo como un diccionario.
                     data: dict = json.load(file)

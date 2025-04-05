@@ -1,7 +1,11 @@
 from src.model.CategoriaLaboral import CategoriaLaboral
+from src.controller.UsuarioController import UsuarioController
 import os
 
 class MainView:
+    def __init__(self) -> None:
+        self.controller = UsuarioController()
+    
     def limpiar_ventana(self) -> None:
         os.system('cls' if os.name == 'nt' else 'clear')
         
@@ -17,7 +21,7 @@ class MainView:
                 print("1. Mantener Datos Cliente")
                 print("2. Gestionar Campaña Publicitaria")
                 print("3. Gestionar Anuncio")
-                print("4. Gestionar Gastos")
+                print("4. Calcular Nomina")
             elif rol.value[1] == "Personal Contacto":
                 print("1. Gestionar Anuncio")
                 print("2. Gestionar Empleados")
@@ -37,7 +41,7 @@ class MainView:
                 input("Presione Enter para continuar...")
                 return None
             elif opcion == '9':
-                # Aquí se implementaría la lógica para cambiar contraseña
+                self.cambiar_password(username)
                 print("Funcionalidad de cambio de contraseña pendiente de implementar.")
                 input("Presione Enter para continuar...")
                 continue
@@ -50,7 +54,7 @@ class MainView:
                     elif opcion == '3':
                         return "anuncio"
                     elif opcion == '4':
-                        return "gastos"
+                        return "nomina"
                     else:
                         print("Opción no válida.")
                         input("Presione Enter para continuar...")
@@ -76,3 +80,23 @@ class MainView:
                     else:
                         print("Opción no válida.")
                         input("Presione Enter para continuar...")
+                        
+    def cambiar_password(self, username: str) -> None:
+        """
+        Lógica de cambio de contraseña para el usuario autenticado.
+        """
+        print("\n--- Cambio de Contraseña ---")
+        nueva = input("Ingrese nueva contraseña: ")
+        confirmacion = input("Confirme nueva contraseña: ")
+        
+        if nueva != confirmacion:
+            print("Las contraseñas no coinciden. Intente nuevamente.")
+        elif len(nueva) < 4:
+            print("La contraseña debe tener al menos 4 caracteres.")
+        else:
+            actualizado = self.controller.cambiar_password(username, nueva)
+            if actualizado:
+                print("Contraseña actualizada con éxito.")
+            else:
+                print("Error al actualizar la contraseña.")
+        input("Presione Enter para continuar...")
