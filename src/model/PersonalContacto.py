@@ -9,12 +9,26 @@ class PersonalContacto(Empleado):
                  nombre: str = "", 
                  email: str = "",
                  usuario: Usuario = None) -> None:
+        """
+        Inicializa una nueva instancia de PersonalContacto.
+
+        Args:
+            id (int, opcional): Identificador del empleado. Por defecto es 0.
+            nombre (str, opcional): Nombre del empleado. Por defecto es una cadena vacía.
+            email (str, opcional): Correo electrónico del empleado. Por defecto es una cadena vacía.
+            usuario (Usuario, opcional): Objeto Usuario asociado. Por defecto es None.
+        """
         super().__init__(id, nombre, email, usuario)
         
     def registrar_empleado(self, nombre: str, email: str, usuario: Usuario) -> None:
         """
-        Registra un empleado asignándole un id autogenerado
-        La asignación del id es realizado mediante un autoincremento en la variable de clase.
+        Registra un nuevo empleado asignándole un ID autogenerado
+        mediante autoincremento desde la clase base Empleado.
+
+        Args:
+            nombre (str): Nombre del empleado.
+            email (str): Correo electrónico del empleado.
+            usuario (Usuario): Objeto Usuario vinculado al empleado.
         """
         Empleado.ultimo_id += 1
         self.id = Empleado.ultimo_id
@@ -26,8 +40,12 @@ class PersonalContacto(Empleado):
         
     def actualizar_datos(self, nombre: str = None, email: str = None, usuario: Usuario = None) -> None:
         """
-        Actualiza los datos del empleado.
-        Si se proporciona un nuevo valor, se actualiza; de lo contrario, mantiene el valor actual.
+        Actualiza los datos del empleado si se proporciona un nuevo valor.
+
+        Args:
+            nombre (str, opcional): Nuevo nombre del empleado.
+            email (str, opcional): Nuevo correo electrónico del empleado.
+            usuario (Usuario, opcional): Nuevo objeto Usuario.
         """
         if nombre is not None:
             self.nombre = nombre
@@ -40,14 +58,23 @@ class PersonalContacto(Empleado):
     
     def to_json(self) -> str:
         """
-        Convierte el objeto Empleado en una cadena JSON
+        Convierte el objeto PersonalContacto en una cadena JSON.
+
+        Returns:
+            str: Representación JSON del objeto.
         """
         return super().to_json()
 
     @classmethod
     def from_json(cls, data: str) -> 'Empleado':
         """
-        Crea un objeto Empleado a partir de una cadena JSON.
+        Crea una instancia de PersonalContacto a partir de una cadena JSON.
+
+        Args:
+            data (str): Cadena JSON con los datos del empleado.
+
+        Returns:
+            PersonalContacto: Objeto deserializado desde el JSON.
         """
         data_dict = json.loads(data)
         usuario = Usuario.from_json(data_dict['usuario'])

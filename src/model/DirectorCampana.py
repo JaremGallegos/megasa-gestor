@@ -9,13 +9,28 @@ class DirectorCampana(Empleado):
                  nombre: str = "",
                  email: str = "",
                  usuario: Usuario = None) -> None:
+        """
+        Inicializa una nueva instancia de DirectorCampana, extendiendo la clase Empleado.
+        
+        Args:
+            id (int, opcional): Identificador del empleado. Por defecto es 0.
+            nombre (str, opcional): Nombre del empleado.
+            email (str, opcional): Email del empleado.
+            usuario (Usuario, opcional): Objeto Usuario asociado al empleado.
+        """
         super().__init__(id, nombre, email, usuario)
     
     def registrar_empleado(self, nombre: str, email: str, usuario: Usuario) -> None:
         """
-        Registra un empleado asignándole un id autogenerado
-        La asignación del id es realizado mediante un autoincremento en la variable de clase.
+        Registra un empleado asignándole un id autogenerado.
+        La asignación del id se realiza mediante un autoincremento en la variable de clase.
+        
+        Args:
+            nombre (str): Nombre del empleado.
+            email (str): Email del empleado.
+            usuario (Usuario): Objeto Usuario asociado al empleado.
         """
+        # Incrementa el último id asignado en la clase Empleado
         Empleado.ultimo_id += 1
         self.id = Empleado.ultimo_id
         self.nombre = nombre
@@ -26,8 +41,13 @@ class DirectorCampana(Empleado):
 
     def actualizar_datos(self, nombre: str = None, email: str = None, usuario: Usuario = None) -> None:
         """
-        Actualiza los datos del empleado.
-        Si se proporciona un nuevo valor, se actualiza; de lo contrario, mantiene el valor actual.
+        Actualiza los datos del Director de Campaña. Si se proporciona un nuevo valor,
+        se actualiza; de lo contrario, se mantiene el valor actual.
+        
+        Args:
+            nombre (str, opcional): Nuevo nombre. Si es None, no se actualiza.
+            email (str, opcional): Nuevo email. Si es None, no se actualiza.
+            usuario (Usuario, opcional): Nuevo objeto Usuario. Si es None, no se actualiza.
         """
         if nombre is not None:
             self.nombre = nombre
@@ -40,16 +60,27 @@ class DirectorCampana(Empleado):
 
     def to_json(self) -> str:
         """
-        Convierte el objeto Empleado en una cadena JSON
+        Convierte el objeto DirectorCampana en una cadena JSON.
+        Se utiliza el método to_json() de la clase Empleado.
+        
+        Returns:
+            str: Cadena JSON que representa al Director de Campaña.
         """
         return super().to_json()
 
     @classmethod
     def from_json(cls, data: str) -> 'DirectorCampana':
         """
-        Crea un objeto Empleado a partir de una cadena JSON.
+        Crea un objeto DirectorCampana a partir de una cadena JSON.
+        
+        Args:
+            data (str): Cadena JSON con los datos del Director de Campaña.
+        
+        Returns:
+            DirectorCampana: Instancia creada a partir del JSON.
         """
         data_dict: dict = json.loads(data)
+        # Deserializa el objeto Usuario si está presente en los datos
         usuario = Usuario.from_json(data_dict['usuario']) if data_dict.get('usuario') else None
         return cls(
             id = data_dict['id'],

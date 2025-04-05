@@ -6,6 +6,7 @@ import os
 class PanelEmpleadoView:
     def __init__(self) -> None:
         """
+        Constructor de la clase PanelEmpleadoView.
         Inicializa la vista del panel de empleados creando una instancia
         del controlador de empleados.
         """
@@ -14,13 +15,15 @@ class PanelEmpleadoView:
     def limpiar_ventana(self) -> None:
         """
         Limpia la consola para mantener la vista organizada.
+        Utiliza 'cls' para sistemas Windows y 'clear' para Unix/Linux.
         """
         os.system('cls' if os.name == 'nt' else 'clear')
         
     def view_panel_empleado(self, username: str, rol: CategoriaLaboral) -> None:
         """
         Muestra el panel principal para la gestión de empleados, permitiendo
-        listar, registrar, actualizar y eliminar empleados. Permite salir del panel.
+        listar, registrar, actualizar y eliminar empleados. También ofrece la opción
+        de salir del panel.
         
         Args:
             username (str): Nombre del usuario autenticado.
@@ -28,6 +31,7 @@ class PanelEmpleadoView:
         """
         while True:
             self.limpiar_ventana()
+            # Encabezado del panel que muestra la información del usuario y su rol.
             print(f"=== Panel Empleado - Usuario: {username} | Rol: {rol.name} ===")
             print("1. Listar empleados")
             print("2. Registrar empleado")
@@ -57,11 +61,13 @@ class PanelEmpleadoView:
         Muestra la lista de empleados registrados. Si no hay empleados,
         informa al usuario.
         """
+        # Obtiene la lista de empleados a través del controlador.
         empleados = self.controller.listar_empleados()
         print("\n=== Lista de Empleados ===")
         if not empleados:
             print("No hay empleados registrados.")
         else:
+            # Itera sobre la lista de empleados y muestra sus detalles.
             for emp in empleados:
                 print(f"ID: {emp.id}, Nombre: {emp.nombre}, Email: {emp.email}")
         input("\nPresione Enter para continuar...")
@@ -69,7 +75,7 @@ class PanelEmpleadoView:
     def registrar_empleado(self) -> None:
         """
         Solicita los datos para registrar un nuevo empleado, crea una instancia
-        de Empleado y utiliza el controlador para persistirla.
+        de PersonalContable y utiliza el controlador para persistirla.
         """
         print("\n=== Registrar Nuevo Empleado ===")
         try:
@@ -83,7 +89,7 @@ class PanelEmpleadoView:
         nombre = input("Ingrese nombre: ")
         email = input("Ingrese email: ")
         
-        # Crear la instancia de Empleado (se asume que se pueden asignar las propiedades directamente).
+        # Crear la instancia de PersonalContable y asignar sus propiedades.
         nuevo_emp = PersonalContable()
         nuevo_emp.id = id_emp
         nuevo_emp.nombre = nombre
@@ -110,6 +116,7 @@ class PanelEmpleadoView:
             input("Presione Enter para continuar...")
             return
         
+        # Se solicita la entrada de nuevos datos; se permite dejar en blanco para no modificar.
         nombre = input("Ingrese nuevo nombre (deje en blanco para no cambiar): ")
         email = input("Ingrese nuevo email (deje en blanco para no cambiar): ")
         
@@ -138,6 +145,7 @@ class PanelEmpleadoView:
             input("Presione Enter para continuar...")
             return
         
+        # Llama al controlador para eliminar el empleado.
         if self.controller.eliminar_empleado(id_emp):
             print("Empleado eliminado exitosamente.")
         else:
