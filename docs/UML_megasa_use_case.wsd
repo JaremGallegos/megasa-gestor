@@ -1,0 +1,80 @@
+@startuml
+' Define system boundary
+rectangle "Sistema Mega S.A." {
+  ' Use Cases para Director de Campaña
+  usecase "Mantener Datos Cliente" as UC1
+  usecase "Registrar Campaña Publicitaria" as UC2
+  usecase "Registrar Finalización de Campaña" as UC3
+  usecase "Registrar Pago de Campaña" as UC4
+  usecase "Consultar Pagos de Campaña" as UC5
+  usecase "Asignar Empleados a Campaña" as UC6
+  usecase "Registrar Empleado de Contacto para Campaña" as UC7
+  usecase "Registrar Anuncio de Campaña" as UC8
+  usecase "Registrar Finalización de Anuncio" as UC9
+  usecase "Registrar Gastos de Campaña" as UC10
+  usecase "Consultar Gastos de Campaña" as UC11
+
+  ' Use Cases para Personal Creativo
+  usecase "Registrar Ideas de Anuncios" as UC12
+  usecase "Consultar Ideas de Anuncios" as UC13
+
+  ' Use Cases para Personal Contable
+  usecase "Mantener Datos de Trabajador" as UC14
+  usecase "Mantener Categoría Laboral" as UC15
+  usecase "Calcular Nómina de los Empleados" as UC16
+
+  ' Relaciones Extend (flechas desde el caso extendido hacia el caso base)
+  UC3 ..> UC2 : <<extend>>
+  UC7 ..> UC6 : <<extend>>
+  UC9 ..> UC8 : <<extend>>
+
+  ' Relaciones Include (flechas desde el caso base hacia el incluido)
+  UC16 ..> UC14 : <<include>>
+  UC16 ..> UC15 : <<include>>
+}
+
+' Actores adicionales
+actor "Director de Campaña" as DC
+actor "Personal Creativo" as PC
+actor "Personal Contable" as PCont
+actor "Cliente" as Cl
+actor "Empleados Asignados" as EA
+actor "Contacto de Personal" as CP
+
+' Asignación de actores a los casos de uso
+
+' Director de Campaña: principal responsable de la gestión de campañas
+DC --> UC1
+DC --> UC2
+DC --> UC3
+DC --> UC4
+DC --> UC5
+DC --> UC6
+DC --> UC7
+DC --> UC8
+DC --> UC9
+DC --> UC10
+DC --> UC11
+
+' Cliente: solicita servicios y realiza pagos; también registra sus datos
+Cl --> UC1
+Cl --> UC4
+Cl --> UC5
+
+' Personal Creativo: encargado de generar ideas para anuncios
+PC --> UC12
+PC --> UC13
+
+' Personal Contable: administra datos de trabajadores, categorías y nóminas
+PCont --> UC14
+PCont --> UC15
+PCont --> UC16
+
+' Empleados Asignados: integran el equipo de campaña (participación implícita en asignación)
+EA --> UC6
+
+' Contacto de Personal: actor específico para el rol de punto de contacto
+CP --> UC7
+CP --> UC11
+
+@enduml

@@ -40,7 +40,7 @@ def main():
         elif opcion == "cliente":
             panel_cliente_view = PanelClienteView()
             panel_cliente_view.view_panel_cliente(username, rol)
-        elif opcion == "empleados":
+        elif opcion == "empleado":
             panel_empleado_view = PanelEmpleadoView()
             panel_empleado_view.view_panel_empleado(username, rol)
         elif opcion == "nomina":

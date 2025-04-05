@@ -1,0 +1,205 @@
+@startuml
+' ===== Classes =====
+
+' --- Anuncio ---
+class Anuncio {
+  {static} - ultimo_id: int
+  - _id: int
+  - _descripcion: str
+  - _estado: str
+  + id: int {get; set;}
+  + descripcion: str {get; set;}
+  + estado: str {get; set;}
+  + registrar_anuncio(descripcion: str): void
+  + registrar_finalizacion(): void
+  + to_json(): str
+  + from_json(data: str): Anuncio <<static>>
+}
+
+' --- Campana ---
+class Campana {
+  {static} - ultimo_id: int
+  - _id: int
+  - _titulo: str
+  - _fecha_inicio: date
+  - _fecha_fin_prevista: date
+  - _costes_estimados: float
+  - _presupuesto: float
+  - _costes_reales: float
+  - _estado: str
+  - _fecha_finalizacion: date
+  - _pagos: List<Pago>
+  - _anuncios: List<Anuncio>
+  - _empleados: List<Empleado>
+  - _cliente: Cliente
+  - _contacto: Empleado
+  + id: int {get; set;}
+  + titulo: str {get; set;}
+  + fecha_inicio: str {get; set;}
+  + fecha_fin_prevista: str {get; set;}
+  + costes_estimados: float {get; set;}
+  + presupuesto: float {get; set;}
+  + costes_reales: float {get; set;}
+  + estado: str {get; set;}
+  + fecha_finalizacion: str {get; set;}
+  + pagos: List<Pago> {get; set;}
+  + anuncios: List<Anuncio> {get; set;}
+  + empleados: List<Empleado> {get; set;}
+  + cliente: Cliente {get; set;}
+  + contacto: Empleado {get; set;}
+  + registrar_campana(titulo: str, fecha_inicio: str, fecha_fin_prevista: str, costes_estimados: float, presupuesto: float): void
+  + registrar_finalizacion(): void
+  + agregar_pago(p: Pago): void
+  + asignar_empleado(e: Empleado): void
+  + registrar_gasto(gasto: float): void
+  + to_json(): str
+  + from_json(data: str): Campana <<static>>
+}
+
+' --- CategoriaLaboral (Enum) ---
+enum CategoriaLaboral {
+  DIRECTOR_CAMPAÑA
+  PERSONAL_CONTABLE
+  PERSONAL_CONTACTO
+  PERSONAL_CREATIVO
+}
+' Note: Each member has attributes: id, nombre, sueldo_base
+
+' --- Cliente ---
+class Cliente {
+  {static} - ultimo_id: int
+  - _id: int
+  - _nombre: str
+  - _direccion: str
+  - _detalle_contacto: str
+  - _campañas: List<Campana>
+  + id: int {get; set;}
+  + nombre: str {get; set;}
+  + direccion: str {get; set;}
+  + detalle_contacto: str {get; set;}
+  + campañas: List<Campana> {get; set;}
+  + registrar_cliente(nombre: str, direccion: str, detalle_contacto: str): void
+  + actualizar_datos(nombre: str, direccion: str, detalle_contacto: str): void
+  + to_json(): str
+  + from_json(data: str): Cliente <<static>>
+}
+
+' --- Empleado (Abstract) ---
+abstract class Empleado {
+  {static} - ultimo_id: int
+  - _id: int
+  - _nombre: str
+  - _email: str
+  - _usuario: Usuario
+  + id: int {get; set;}
+  + nombre: str {get; set;}
+  + email: str {get; set;}
+  + usuario: Usuario {get; set;}
+  + registrar_empleado(nombre: str, email: str, usuario: Usuario): void <<abstract>>
+  + actualizar_datos(nombre: str, email: str, usuario: Usuario): void <<abstract>>
+  + to_json(): str
+}
+
+' --- DirectorCampana ---
+class DirectorCampana {
+  + registrar_empleado(nombre: str, email: str, usuario: Usuario): void
+  + actualizar_datos(nombre: str, email: str, usuario: Usuario): void
+  + to_json(): str
+  + from_json(data: str): DirectorCampana <<static>>
+}
+DirectorCampana -|> Empleado
+
+' --- NotaConceptual ---
+class NotaConceptual {
+  {static} - ultimo_id: int
+  - _id: int
+  - _descripcion: str
+  - _fecha: date
+  + id: int {get; set;}
+  + descripcion: str {get; set;}
+  + fecha: str {get; set;}
+  + registrar_nota(descripcion: str, fecha: str): void
+  + to_json(): str
+  + from_json(data: str): NotaConceptual <<static>>
+}
+
+' --- Pago ---
+class Pago {
+  - _id: int
+  - _monto: float
+  - _fecha_pago: str
+  + id: int {get; set;}
+  + monto: float {get; set;}
+  + fecha_pago: str {get; set;}
+  + to_json(): str
+  + from_json(data: str): Pago <<static>>
+}
+
+' --- PersonalContable ---
+class PersonalContable {
+  + registrar_empleado(nombre: str, email: str, usuario: Usuario): void
+  + actualizar_datos(nombre: str, email: str, usuario: Usuario): void
+  + to_json(): str
+  + from_json(data: str): PersonalContable <<static>>
+}
+PersonalContable -|> Empleado
+
+' --- PersonalContacto ---
+class PersonalContacto {
+  + registrar_empleado(nombre: str, email: str, usuario: Usuario): void
+  + actualizar_datos(nombre: str, email: str, usuario: Usuario): void
+  + to_json(): str
+  + from_json(data: str): PersonalContacto <<static>>
+}
+PersonalContacto -|> Empleado
+
+' --- PersonalCreativo ---
+class PersonalCreativo {
+  + registrar_empleado(nombre: str, email: str, usuario: Usuario): void
+  + actualizar_datos(nombre: str, email: str, usuario: Usuario): void
+  + to_json(): str
+  + from_json(data: str): PersonalCreativo <<static>>
+}
+PersonalCreativo -|> Empleado
+
+' --- Usuario ---
+class Usuario {
+  - _username: str
+  - _password: str
+  - _rol: CategoriaLaboral
+  + username: str {get; set;}
+  + password: str {get; set;}
+  + rol: CategoriaLaboral {get; set;}
+  + autenticar(input_user: str, input_pass: str): bool
+  + registrar_usuario(username: str, password: str): void
+  + to_json(): str
+  + from_json(data: str): Usuario <<static>>
+}
+
+' ===== Associations =====
+
+' Campana -> Pago (composition: Campana tiene muchos pagos)
+Campana "1" *-- "0..*" Pago
+
+' Campana -> Anuncio (composition: Campana tiene muchos anuncios)
+Campana "1" *-- "0..*" Anuncio
+
+' Campana -> Empleado (as empleados)
+Campana "1" *-- "0..*" Empleado
+
+' Campana -> Cliente (association)
+Campana "1" --> "0..1" Cliente
+
+' Campana -> Empleado (as contacto)
+Campana "1" --> "0..1" Empleado : contacto
+
+' Cliente -> Campana (Cliente tiene muchas campañas)
+Cliente "1" o-- "0..*" Campana
+
+' Empleado -> Usuario (association)
+Empleado "1" --> "0..1" Usuario
+
+' Usuario -> CategoriaLaboral (association)
+Usuario "1" --> "1" CategoriaLaboral
+
+@enduml

@@ -84,7 +84,7 @@ class MainView:
                     if opcion == '1':
                         return "anuncio"
                     elif opcion == '2':
-                        return "empleados"
+                        return "empleado"
                     else:
                         print("Opción no válida.")
                         input("Presione Enter para continuar...")
@@ -98,7 +98,7 @@ class MainView:
                     if opcion == '1':
                         return "categoria"
                     elif opcion == '2':
-                        return "empleados"
+                        return "empleado"
                     else:
                         print("Opción no válida.")
                         input("Presione Enter para continuar...")
